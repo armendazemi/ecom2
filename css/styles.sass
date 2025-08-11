@@ -1,0 +1,1150 @@
+//--------------------------
+// Primitive Color Variables
+// --------------------------
+
+// Neutral Colors
+$neutral-1000: #030712
+$neutral-800: #1E2939
+$neutral-600: #364153
+$neutral-400: #99A1AF
+$neutral-200: #E5E7EB
+$neutral-100: #F3F4F6
+$neutral-0: #FFFFFF
+
+// Alpha neutral
+$alpha-neutral-A800: rgba(255, 255, 255, 0.85)
+$alpha-neutral-A350: rgba(255, 255, 255, 0.2)
+$alpha-neutral-A300: rgba(255, 255, 255, 0.16)
+$alpha-neutral-A200: rgba(255, 255, 255, 0.08)
+$alpha-neutral-A100: rgba(255, 255, 255, 0.04)
+$alpha-neutral-100A: rgba(3, 7, 18, 0.04)
+$alpha-neutral-200A: rgba(3, 7, 18, 0.06)
+$alpha-neutral-300A: rgba(3, 7, 18, 0.14)
+$alpha-neutral-500A: rgba(3, 7, 18, 0.50)
+
+// Primary Colors
+$primary-1000: #141A36
+$primary-800: #1C254D
+$primary-400: #FAFAFA
+$primary-300: #EFEFEF
+$primary-200: #FAFAFA
+$primary-A100: rgba(204, 213, 221, 0.3)
+$primary-A200: rgba(204, 213, 221, 0.5)
+
+// Secondary
+$secondary-800: #32509B
+$secondary-700: #3761BE
+$secondary-300: #96C3EC
+$secondary-200: #C8DEF5
+
+// System Colors
+$blue-700: #0C66E4
+
+$red-800: #AE2E24
+$red-700: #C9372C
+$red-600: #E2483D
+$red-400: #F87168
+
+
+//--------------------------
+// Semantic Color Variables
+// --------------------------
+
+// Text Colors
+$text-primary: $neutral-1000
+$text-secondary: $neutral-800
+$text-tertiary: $neutral-600
+$text-inverse: $neutral-0
+$text-disabled: $neutral-400
+$text-white: #fff
+
+$text-brand-primary: $primary-800
+$text-brand-secondary: $secondary-700
+$text-brand-selected: $primary-1000
+$text-brand-secondary-hover: $secondary-800
+
+$text-colors: (primary: $text-primary, secondary: $text-secondary, tertiary: $text-tertiary, inverse: $text-inverse, disabled: $text-disabled, white: $text-white, brand-primary: $text-brand-primary, brand-secondary: $text-brand-secondary, brand-secondary-hover: $text-brand-secondary-hover, brand-selected: $text-brand-selected)
+@each $name, $value in $text-colors
+  .text-#{$name}
+    color: $value !important
+
+
+// Foreground
+$foreground-primary: $neutral-1000
+$foreground-secondary: $neutral-800
+$foreground-tertiary: $neutral-600
+$foreground-inverse: $neutral-0
+$foreground-disabled: $neutral-400
+
+$foreground-brand-primary: $primary-800
+$foreground-brand-secondary: $secondary-700
+$foreground-brand-secondary-hover: $secondary-800
+$foreground-brand-selected: $primary-1000
+
+$fg-colors: (primary: $foreground-primary, secondary: $foreground-secondary, tertiary: $foreground-tertiary, inverse: $foreground-inverse, disabled: $foreground-disabled, brand-primary: $foreground-brand-primary, brand-secondary: $foreground-brand-secondary, brand-secondary-hover: $foreground-brand-secondary-hover, brand-selected: $foreground-brand-selected)
+@each $name, $value in $fg-colors
+  .fg-#{$name}
+    color: $value !important
+
+// Background
+$background-default: $neutral-0
+$background-neutral: $alpha-neutral-200A
+$background-neutral-hover: $alpha-neutral-300A
+$background-subtle-hover: $alpha-neutral-200A
+$background-disabled: $neutral-100
+
+$background-brand-primary: $primary-800
+$background-brand-primary-hover: $primary-1000
+$background-brand-secondary: $secondary-300
+$background-brand-bold: $primary-1000
+$background-brand-subtle: $primary-300
+$background-brand-soft: $primary-200
+$background-brand-subtle-alpha: $primary-A100
+$background-brand-subtle-alpha-hover: $primary-A200
+
+$bg-colors: (default: $background-default, neutral: $background-neutral, neutral-hover: $background-neutral-hover, subtle-hover: $background-subtle-hover, disabled: $background-disabled, brand-primary: $background-brand-primary, brand-primary-hover: $background-brand-primary-hover, brand-secondary: $background-brand-secondary, brand-bold: $background-brand-bold, brand-subtle: $background-brand-subtle, brand-soft: $background-brand-soft, brand-subtle-alpha: $background-brand-subtle-alpha, brand-subtle-alpha-hover: $background-brand-subtle-alpha-hover)
+@each $name, $value in $bg-colors
+  .bg-#{$name}
+    background-color: $value !important
+
+
+// Border
+$border-bold: $neutral-1000
+$border-subtle: $alpha-neutral-500A
+$border-soft: $alpha-neutral-300A
+$border-inverse: $neutral-0
+$border-brand: $primary-800
+$border-disabled: $neutral-200
+$border-focus: $blue-700
+
+// Error
+$error-text: $red-800
+$error-foreground: $red-800
+$error-bg-bold: $red-700
+$error-bg-bold-hover: $red-800
+$error-border: $red-600
+$error-border-subtle: $red-400
+
+
+//--------------------------
+// Spacings
+// --------------------------
+$space-0: 0px
+$space-025: 2px
+$space-050: 4px
+$space-075: 6px
+$space-100: 8px
+$space-125: 10px
+$space-150: 12px
+$space-200: 16px
+$space-300: 24px
+$space-400: 32px
+$space-600: 48px
+$space-800: 64px
+$space-1200: 96px
+$space-1600: 128px
+$space-1800: 144px
+
+$spacings: (0: 0px, 025: 2px, 050: 4px, 075: 6px, 100: 8px, 125: 10px, 150: 12px, 200: 16px, 300: 24px, 400: 32px, 600: 48px, 800: 64px, 1200: 96px, 1600: 128px, 1800: 144px)
+
+$breakpoints: (sm: 568px, md: 768px, lg: 992px, xl: 1200px)
+
+@each $size, $value in $spacings
+  .gap-#{$size}
+    gap: $value !important
+
+  .row-gap-#{$size}
+    row-gap: $value !important
+
+  .column-gap-#{$size}
+    column-gap: $value !important
+
+  .padding-#{$size}
+    padding: $value !important
+
+  .padding-top-#{$size}
+    padding-top: $value !important
+
+  .padding-right-#{$size}
+    padding-right: $value !important
+
+  .padding-bottom-#{$size}
+    padding-bottom: $value !important
+
+  .padding-left-#{$size}
+    padding-left: $value !important
+
+  .padding-x-#{$size}
+    padding-left: $value !important
+    padding-right: $value !important
+
+  .padding-y-#{$size}
+    padding-top: $value !important
+    padding-bottom: $value !important
+
+  .margin-#{$size}
+    margin: $value !important
+
+  .margin-top-#{$size}
+    margin-top: $value !important
+
+  .margin-right-#{$size}
+    margin-right: $value !important
+
+  .margin-bottom-#{$size}
+    margin-bottom: $value !important
+
+  .margin-left-#{$size}
+    margin-left: $value !important
+
+  .margin-x-#{$size}
+    margin-left: $value !important
+    margin-right: $value !important
+
+  .margin-y-#{$size}
+    margin-top: $value !important
+    margin-bottom: $value !important
+
+// Breakpoint classes
+@each $breakpoint, $breakpoint-value in $breakpoints
+  $breakpoint-name: ''
+
+  @if $breakpoint == sm
+    $breakpoint-name: 'sm'
+  @else if $breakpoint == md
+    $breakpoint-name: 'md'
+  @else if $breakpoint == lg
+    $breakpoint-name: 'lg'
+
+  @if $breakpoint-name != ''
+    @media (min-width: $breakpoint-value)
+      @each $size, $value in $spacings
+        .gap-#{$breakpoint-name}-#{$size}
+          gap: $value !important
+
+        .row-gap-#{$breakpoint-name}-#{$size}
+          row-gap: $value !important
+
+        .column-gap-#{$breakpoint-name}-#{$size}
+          column-gap: $value !important
+
+        .padding-#{$breakpoint-name}-#{$size}
+          padding: $value !important
+
+        .padding-top-#{$breakpoint-name}-#{$size}
+          padding-top: $value !important
+
+        .padding-right-#{$breakpoint-name}-#{$size}
+          padding-right: $value !important
+
+        .padding-bottom-#{$breakpoint-name}-#{$size}
+          padding-bottom: $value !important
+
+        .padding-left-#{$breakpoint-name}-#{$size}
+          padding-left: $value !important
+
+        .padding-x-#{$breakpoint-name}-#{$size}
+          padding-left: $value !important
+          padding-right: $value !important
+
+        .padding-y-#{$breakpoint-name}-#{$size}
+          padding-top: $value !important
+          padding-bottom: $value !important
+
+        .margin-#{$breakpoint-name}-#{$size}
+          margin: $value !important
+
+        .margin-top-#{$breakpoint-name}-#{$size}
+          margin-top: $value !important
+
+        .margin-right-#{$breakpoint-name}-#{$size}
+          margin-right: $value !important
+
+        .margin-bottom-#{$breakpoint-name}-#{$size}
+          margin-bottom: $value !important
+
+        .margin-left-#{$breakpoint-name}-#{$size}
+          margin-left: $value !important
+
+        .margin-x-#{$breakpoint-name}-#{$size}
+          margin-left: $value !important
+          margin-right: $value !important
+
+        .margin-y-#{$breakpoint-name}-#{$size}
+          margin-top: $value !important
+          margin-bottom: $value !important
+
+//--------------------------
+// TYPOGRAPHY
+// --------------------------
+$font-heading: "Instrument Sans", sans-serif
+$font-body: "Barlow", sans-serif
+
+// Mixins
+@mixin fontSizePxToRem($value)
+  $remValue: $value / 16
+  font-size: $remValue + rem
+
+$weights: (regular: 400, medium: 500, semi: 600, bold: 700)
+@each $weight, $value in $weights
+  .fw-#{$weight}
+    font-weight: $value !important
+
+// Base
+*
+  font-family: $font-body
+
+h1, h2, h3, h4, h5, h6
+  font-family: $font-heading
+  font-weight: 700
+  line-height: 140%
+
+// Headings
+
+.display-xxl
+  @include fontSizePxToRem(40)
+  @media (min-width: 992px)
+    @include fontSizePxToRem(56)
+
+.display-xl
+  @include fontSizePxToRem(36)
+  @media (min-width: 992px)
+    @include fontSizePxToRem(48)
+
+.display-lg
+  @include fontSizePxToRem(32)
+  @media (min-width: 992px)
+    @include fontSizePxToRem(10)
+
+.display-md
+  @include fontSizePxToRem(24)
+  @media (min-width: 992px)
+    @include fontSizePxToRem(32)
+
+.display-sm
+  @include fontSizePxToRem(20)
+  @media (min-width: 992px)
+    @include fontSizePxToRem(24)
+
+.display-xs
+  @include fontSizePxToRem(18)
+  @media (min-width: 992px)
+    @include fontSizePxToRem(20)
+
+.display-xxs
+  @include fontSizePxToRem(18)
+
+// Subtitles
+.subtitle-1
+  @include fontSizePxToRem(20)
+  line-height: 140%
+  font-weight: 700
+
+.subtitle-2
+  @include fontSizePxToRem(18)
+  line-height: 140%
+  font-weight: 700
+
+// Buttons
+.button-md
+  @include fontSizePxToRem(16)
+  font-weight: 500
+
+.button-md
+  @include fontSizePxToRem(14)
+  font-weight: 500
+
+label
+  @include fontSizePxToRem(14)
+  font-weight: 500
+  margin-bottom: $space-050
+
+//Text
+$body-text-sizes: (lg: 18, md: 16, sm: 14, tiny: 12)
+@each $size, $value in $body-text-sizes
+  .text-#{$size}
+    @include fontSizePxToRem($value)
+// --------------------------
+// Radius
+// --------------------------
+$radiuses: (xxs: 2px, xs: 4px, sm: 8px, md: 12px, lg: 16px, xl: 24px, full: 9999px)
+@each $size, $value in $radiuses
+  .radius-#{$size}
+    border-radius: $value !important
+
+$radius-xxs: 2px
+$radius-xs: 4px
+$radius-sm: 8px
+$radius-md: 12px
+$radius-lg: 16px
+$radius-xl: 24px
+$radius-full: 9999px
+
+// --------------------------
+// Header height
+// --------------------------
+$header-height: var(--header-height)
+
+
+
+//--------------------------
+// UI Elements
+// --------------------------
+
+button
+  font-family: $font-body
+  border: none
+  cursor: pointer
+  transition: all linear 200ms
+
+.button-small
+  height: 36px !important
+  padding: 0 $space-200 !important
+  @include fontSizePxToRem(14)
+
+%button-base
+  display: flex
+  align-items: center
+  justify-content: center
+  column-gap: $space-100
+  border: 1px solid transparent
+  font-weight: 500
+  margin: 0
+  text-decoration: none
+  font-family: $font-body
+  height: 44px
+  padding: 0 $space-300
+  @include fontSizePxToRem(16)
+
+.brand-button-primary
+  @extend %button-base
+  color: $text-white
+  background-color: $background-brand-primary
+
+  &:hover
+    background-color: $background-brand-primary-hover
+
+  &:disabled,
+  &.disabled
+    background-color: $background-disabled
+    color: $text-disabled
+    cursor: not-allowed
+
+  &[href^="#"]:not([href="#"])
+    &::after
+      content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M11.25 4.5V16.627L5.55375 10.9307L4.5 12L12 19.5L19.5 12L18.4462 10.9307L12.75 16.627V4.5H11.25Z" fill="white"/></svg>')
+      display: inline-block
+      width: 24px
+      height: 24px
+
+.brand-button-primary--dark
+  @extend %button-base
+  color: $neutral-1000
+  background-color: #ffF
+
+  &:hover
+    background-color: $alpha-neutral-A800
+
+  &:disabled,
+  &.disabled
+    background-color: $background-disabled
+    color: $text-disabled
+    cursor: not-allowed
+
+
+.brand-button-secondary
+  @extend %button-base
+  background-color: transparent
+  color: $text-brand-primary
+  border: 1px solid $border-brand
+
+  &:hover
+    background-color: $background-brand-subtle-alpha-hover
+
+  &:disabled,
+  &.disabled
+    pointer-events: none
+    background-color: transparent
+    border-color: $border-disabled
+    color: $text-disabled
+
+  &[aria-selected="true"]
+    color: $text-white
+    background-color: $background-brand-primary
+
+.brand-button-secondary--dark
+  @extend %button-base
+  background-color: transparent
+  color: $text-white
+  border: 1px solid #fff
+
+  &:hover
+    background-color: $background-brand-subtle-alpha-hover
+
+  &:disabled,
+  &.disabled
+    pointer-events: none
+    background-color: $background-default
+    border-color: $border-disabled
+    color: $text-disabled
+
+
+.neutral-button-primary
+  @extend %button-base
+  background-color: $background-brand-subtle-alpha
+  color: $text-brand-primary
+
+  &:hover
+    background-color: $background-brand-subtle-alpha-hover
+
+  &:disabled,
+  &.disabled
+    pointer-events: none
+    background-color: $background-disabled
+    color: $text-disabled
+    cursor: not-allowed
+
+.neutral-button-primary--dark
+  @extend %button-base
+  background-color: $background-brand-subtle-alpha
+  color: $text-brand-primary
+
+  &:hover
+    background-color: $background-brand-subtle-alpha-hover
+
+  &:disabled,
+  &.disabled
+    pointer-events: none
+    background-color: $background-disabled
+    color: $text-disabled
+    cursor: not-allowed
+
+
+.clear-button
+  @extend %button-base
+  background-color: transparent
+  padding: 0
+
+.nav-button
+  @extend %button-base
+  background-color: transparent
+  padding: 0
+
+  &:hover,
+  &:focus-visible
+    text-decoration: underline 1px solid currentColor
+
+.text-button
+  @extend %button-base
+  padding: 0
+
+  svg, &::after
+    margin: 0
+    transition: margin 200ms ease-out
+
+  &:hover,
+  &:focus-visible
+    svg, span, &::after
+      margin-left: $space-050
+
+  &:disabled,
+  &.disabled
+    pointer-events: none
+    color: $text-disabled
+    cursor: not-allowed
+
+.text-button--brand
+  @extend .text-button
+  color: $text-brand-primary
+
+
+.icon-button
+  background-color: transparent
+  border-radius: $radius-full
+  display: flex
+  align-items: center
+  justify-content: center
+
+  &.small
+    height: 36px
+    width: 36px
+
+  &.large
+    height: 44px
+    width: 44px
+
+// --------------------------
+// HELPERS
+// --------------------------
+.display-xxl-heading
+  h1, h2, h3, h4, h5
+    @extend .display-xxl
+
+.display-xl-heading
+  h1, h2, h3, h4, h5
+    @extend .display-xl
+
+.display-lg-heading
+  h1, h2, h3, h4, h5
+    @extend .display-lg
+
+.display-md-heading
+  h1, h2, h3, h4, h5
+    @extend .display-md
+
+.display-sm-heading
+  h1, h2, h3, h4, h5
+    @extend .display-sm
+
+.display-xs-heading
+  h1, h2, h3, h4, h5
+    @extend .display-xs
+
+.display-subtitle-1-heading
+  h1, h2, h3, h4, h5
+    @extend .subtitle-1
+
+.display-subtitle-2-heading
+  h1, h2, h3, h4, h5
+    @extend .subtitle-2
+
+.text-lg-heading
+  h1, h2, h3, h4, h5
+    @extend .text-lg
+
+.weight-400-heading
+  h1, h2, h3, h4, h5
+    font-weight: 400
+
+.heading-200-spacing
+  h1, h2, h3, h4, h5, h6
+    margin-bottom: $space-200
+
+    &:not(:first-of-type)
+      margin-top: $space-400
+
+.heading-300-spacing
+  h1, h2, h3, h4, h5, h6
+    margin-bottom: $space-300
+
+    &:not(:first-of-type)
+      margin-top: $space-300
+
+.text-xl-p
+  p
+    @include fontSizePxToRem(20)
+
+.text-lg-p
+  p
+    @extend .text-lg
+
+.text-md-p
+  p
+    @extend .text-md
+
+.p-semi
+  p
+    font-weight: 600
+
+.p-light
+  p
+    font-weight: 300
+
+.p-color-secondary
+  p
+    color: $text-secondary
+
+.family-heading
+  font-family: $font-heading
+
+  *
+    font-family: $font-heading
+
+.family-body
+  font-family: $font-body
+
+  *
+    font-family: $font-body
+
+.family-mono
+  font-family: $font-body
+
+  *
+    font-family: $font-body
+
+.heading-family-mono
+  h1, h2, h3, h4, h5, h6
+    font-family: $font-body
+
+.all-caps
+  text-transform: uppercase
+
+.brand-button-primary-editable
+  a
+    @extend .brand-button-primary
+
+.brand-button-primary-dark-editable
+  a
+    @extend .brand-button-primary--dark
+
+.brand-button-secondary-editable
+  a
+    @extend .brand-button-secondary
+
+.brand-buttons
+  p:has(a)
+    a
+      @extend .brand-button-secondary
+
+  p:has(a):first-of-type
+    a
+      @extend .brand-button-primary
+
+.brand-buttons-primary-dark
+  p:has(a)
+    a
+      @extend .brand-button-secondary--dark
+
+  p:has(a):first-of-type
+    a
+      @extend .brand-button-primary--dark
+
+.text-button-editable
+  a
+    @extend .text-button
+
+.text-button-brand-editable
+  a
+    @extend .text-button--brand
+
+
+.footer-links
+  a
+// @extend .footer-link
+
+.brand-links
+  a
+// @extend .brand-link
+
+
+.cta-400-spacing
+  p:has(a,button)
+    margin-top: $space-300
+    @media (min-width: 992px)
+      margin-top: $space-400
+
+.icon--24
+  font-size: 24px
+
+.border-top-1--primary
+  border-top: 1px solid $border-bold
+
+.border-top-1--brand
+  border-top: 1px solid $border-brand
+
+.border-top-1-lg--brand
+  @media (min-width: 992px)
+    border-top: 1px solid $border-brand
+
+.border-top-1--inverse
+  border-top: 1px solid $neutral-0
+
+.border-bottom-1--brand
+  border-bottom: 1px solid $border-brand
+
+.border-bottom-1-lg--brand
+  @media (min-width: 992px)
+    border-bottom: 1px solid $border-brand
+
+.border-left-1-lg--inverse
+  @media (min-width: 992px)
+    border-left: 1px solid $neutral-0
+
+.border-left-1-lg--brand
+  @media (min-width: 992px)
+    border-left: 1px solid $border-brand
+
+.nav-items
+  a
+// @extend .nav-item
+
+.rotate
+  transition: transform 0.3s ease-in-out
+
+
+a.right-arrow--brand,
+.right-arrow--brand a
+  &::after
+    content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M16.627 12.75H4.5V11.25H16.627L10.9308 5.55375L12 4.5L19.5 12L12 19.5L10.9308 18.4462L16.627 12.75Z" fill="%23003057"/></svg>')
+    display: inline-block
+    width: 24px
+    height: 24px
+
+a.right-arrow--brand-secondary,
+.right-arrow--brand-secondary a
+  &::after
+    content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none"><path d="M16.627 13.72H4.5V12.22H16.627L10.9308 6.52372L12 5.46997L19.5 12.97L12 20.47L10.9308 19.4162L16.627 13.72Z" fill="%233761BE"/></svg>')
+    display: inline-block
+    width: 24px
+    height: 24px
+
+a.left-arrow--brand,
+.left-arrow--brand a
+  &::before
+    content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M7.373 12.75L13.0693 18.4462L12 19.5L4.5 12L12 4.5L13.0693 5.55375L7.373 11.25H19.5V12.75H7.373Z" fill="%23003057"/></svg>')
+    display: inline-block
+    width: 24px
+    height: 24px
+
+
+.check-list-editable
+  ul
+// @extend .check-list
+
+.default-table-editable
+  table
+// @extend .default-table
+
+// ------------------------------
+// Global
+// ------------------------------
+// Used for scrolling with anchor links
+*
+  scroll-margin-top: calc(var(--header-height) + $space-400)
+  text-underline-offset: 2px
+
+html, body
+  min-height: 100vh
+
+
+body
+  font-size: 1rem
+  display: flex
+  flex-direction: column
+
+  *:focus
+    outline: none
+
+  *
+    &:focus-visible
+      box-shadow: 0 0 0 2px $blue-700
+      transition: box-shadow 0.2s ease-out
+
+
+header
+  position: sticky
+  top: 0
+  width: 100%
+  z-index: 10
+  background-color: #FFF
+  box-shadow: 0px 4px 6px -1px rgba(9, 30, 66, 0.07), 0px 2px 4px -2px rgba(9, 30, 66, 0.04)
+
+img
+  width: 100%
+
+button
+  *
+    pointer-events: none
+
+h1, h2, h3, h4, h5, h6, p
+  margin-bottom: 0
+
+.inset-0
+  inset: 0
+
+.w-fit-content
+  width: fit-content
+
+.aspect-1
+  aspect-ratio: 1
+
+a
+  color: unset
+
+.swiper-slide
+  height: auto
+
+// ------------------------------
+// Components
+// ------------------------------
+modal-component
+  display: none
+  position: fixed
+  z-index: 1000
+  opacity: 0
+  transition: all 0.3s ease-in-out
+
+  &.open
+    opacity: 1
+
+.default-modal
+  width: min(100%, 500px)
+  box-shadow: 0px 3px 3px -1.5px rgba(9, 30, 66, 0.04), 0px 8px 8px -4px rgba(9, 30, 66, 0.03), 0px 20px 24px -4px rgba(9, 30, 66, 0.08)
+  top: 50%
+  left: 50%
+  transform: translate(-50%, -50%)
+
+
+.default-modal__header,
+.default-modal__content,
+.default-modal__footer
+  padding: $space-200
+
+.default-modal__header
+  display: flex
+  align-items: center
+  justify-content: space-between
+
+.default-modal__footer
+  display: flex
+  align-items: center
+  justify-content: flex-end
+  gap: $space-150
+
+accordion-component,
+progress-accordion
+
+  .dropdown
+    display: none
+    height: 0
+    overflow: hidden
+    transition: height 300ms ease-in-out
+
+    &.show
+      display: block !important
+      height: auto !important
+
+  &:has(.open)
+    .rotate
+      transform: rotate(180deg)
+
+.overlay
+  display: none
+  position: fixed
+  opacity: 0
+  z-index: 999
+  inset: 0
+  background: rgba(0, 0, 0, .2)
+  transition: opacity 300ms ease-out
+
+  &.open
+    opacity: 1
+
+
+#skip-link
+  position: absolute
+  top: -40px
+  height: 40px
+  left: 50%
+  transform: translateX(-50%)
+  background-color: $neutral-1000
+  color: $text-inverse
+  text-align: center
+  line-height: 40px
+  z-index: 1000
+  transition: top 0.3s ease-in-out
+
+  &:focus,
+  &:active
+    top: 0
+
+
+// --------------------------
+// LINKS TABS & BREADCRUMBS$
+// --------------------------
+%link-base
+  display: flex
+  gap: $space-050
+  text-decoration: 1px solid currentColor underline
+  background-color: transparent
+
+  &:disabled,
+  &.disabled
+    color: $text-disabled
+    cursor: not-allowed
+
+.brand-link
+  @extend %link-base
+  color: $text-brand-secondary
+
+  &:hover
+    color: $text-brand-secondary-hover
+
+  &:visited
+    color: $text-brand-selected
+
+.brand-link-secondary
+  @extend %link-base
+  color: $text-brand-secondary
+
+  &:hover
+    color: $text-brand-secondary-hover
+
+  &:visited
+    color: $text-brand-selected
+
+.footer-link
+  @extend %link-base
+  color: $secondary-300
+  display: inline-flex
+
+.neutral-link
+  @extend %link-base
+  color: $text-primary
+
+// --------------------------
+// Breadcrumbs
+// --------------------------
+.breadcrumbs
+  display: flex
+  align-items: center
+  column-gap: $space-050
+  padding: $space-150 0
+
+.breadcrumb-link
+  @extend .neutral-link
+
+  &.active
+    font-weight: 500
+    text-decoration: none
+
+
+// --------------------------
+// BADGES
+// --------------------------
+
+.default-badge
+  display: flex
+  align-items: center
+  justify-content: center
+  border-radius: $radius-full
+  border: 1px solid $border-brand
+  padding: $space-025 $space-125
+  @include fontSizePxToRem(14)
+  color: $text-brand-primary
+  font-weight: 500
+  letter-spacing: 0.2px
+  text-transform: uppercase
+  line-height: 20px
+
+
+// --------------------------
+// INPUTS
+// --------------------------
+
+%base-input
+  display: flex
+  align-items: center
+  justify-content: space-between
+  border-radius: 0
+  gap: $space-100
+  padding: 0 $space-150
+  height: 44px
+  min-width: 0
+  border: 1px solid $border-bold
+  color: $text-primary
+  outline: none
+
+  &:hover
+    background-color: $background-subtle-hover
+
+  &::placeholder
+    color: $text-tertiary
+
+  &.error
+    border-color: $error-foreground !important
+
+    &:focus-visible,
+    &:active
+      border-color: $error-foreground !important
+
+  &:disabled,
+  &.disabled
+    background-color: $background-disabled
+    border-color: $border-disabled
+    color: $text-disabled
+    cursor: not-allowed
+
+  &:read-only
+    background-color: $background-disabled
+    border-color: $border-disabled
+    color: $text-secondary
+
+.input-default
+  @extend %base-input
+  background-color: $background-default
+
+.textarea-default
+  @extend %base-input
+  background-color: $background-default
+  height: auto
+
+.search-input
+  padding-left: $space-400
+  padding-right: $space-600
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M17.5 17.5L13.875 13.875M15.8333 9.16667C15.8333 12.8486 12.8486 15.8333 9.16667 15.8333C5.48477 15.8333 2.5 12.8486 2.5 9.16667C2.5 5.48477 5.48477 2.5 9.16667 2.5C12.8486 2.5 15.8333 5.48477 15.8333 9.16667Z" stroke="%23030712" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>')
+  background-repeat: no-repeat
+  background-position: $space-150 center
+
+
+.search-input-clear
+  display: none
+  position: absolute
+  right: 6px
+  opacity: 0
+  transition: 200ms opacity linear
+
+  &.open
+    opacity: 1
+
+
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration
+  display: none
+
+%check-radio-base
+  accent-color: $foreground-primary
+  height: 20px
+  width: 20px
+  padding: 0 !important
+  border-color: $border-bold
+
+  &:disabled,
+  &.disabled
+    border-color: $border-disabled
+
+
+input[type=checkbox]
+  @extend %check-radio-base
+  border-radius: $radius-xs
+
+input[type=radio]
+  @extend %check-radio-base
+
+
+select
+  padding: $space-100
+  border-radius: 0
+  border: 1px solid $border-bold
+  width: 100%
+  appearance: none
+  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none"><path d="M10.3345 12.7735L5.62305 8.06204L6.39701 7.28809L10.3345 11.2256L14.272 7.28809L15.046 8.06204L10.3345 12.7735Z" fill="%23030712"/></svg>')
+  background-repeat: no-repeat
+  background-position: right $space-150 top 50%
+  cursor: pointer
+
+// ----
+// HEADER
+// ----
+.menu-dropdown
+  top: calc(100% + $space-200)
+  border-radius: var(--Radius-radius-0, 0)
+  border-right: 1px solid $border-soft
+  border-bottom: 1px solid $border-soft
+  border-left: 1px solid $border-soft
+  background: $neutral-0
+
+  a
+    white-space: nowrap
