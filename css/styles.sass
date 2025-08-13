@@ -296,7 +296,7 @@ $weights: (regular: 400, medium: 500, semi: 600, bold: 700)
 
 h1, h2, h3, h4, h5, h6
   font-family: $font-heading
-  font-weight: 700
+  font-weight: 500
   line-height: 140%
 
 // Headings
@@ -333,6 +333,12 @@ h1, h2, h3, h4, h5, h6
 
 .display-xxs
   @include fontSizePxToRem(18)
+
+.display-subheading
+  @include fontSizePxToRem(14)
+  font-weight: 600
+  letter-spacing: 0.56px
+  text-transform: uppercase
 
 // Subtitles
 .subtitle-1
@@ -1139,12 +1145,18 @@ select
 // HEADER
 // ----
 .menu-dropdown
-  top: calc(100% + $space-200)
-  border-radius: var(--Radius-radius-0, 0)
-  border-right: 1px solid $border-soft
-  border-bottom: 1px solid $border-soft
-  border-left: 1px solid $border-soft
-  background: $neutral-0
+  width: 100%
+  left: 0
+  background-color: $neutral-0
+  border-bottom: $border-soft
+  padding: $space-400 0
 
-  a
-    white-space: nowrap
+
+.menu-item
+  text-decoration: none
+  color: $text-primary
+  padding: $space-100 0
+  line-height: 150%
+
+  &:hover
+    text-decoration: underline

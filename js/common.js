@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
   setupLocaleListeners();
-
   setupMenuDropdowns();
 
 });
@@ -23,13 +22,11 @@ function getUrlForLocaleURLApi (currentUrl, newLocale) {
     const url = new URL(currentUrl);
     const pathSegments = url.pathname.split('/').filter(segment => segment !== '');
 
-// Check if the first segment is a potential locale code
     let existingLocale = null;
     if (pathSegments.length > 0 && /^[a-z]{2}$/i.test(pathSegments[0])) {
       existingLocale = pathSegments[0].toLowerCase();
     }
 
-// Start building the new path segments
     let newPathSegments = [...pathSegments];
 
 // Remove the existing locale segment if it was found
@@ -37,7 +34,6 @@ function getUrlForLocaleURLApi (currentUrl, newLocale) {
       newPathSegments.shift();
     }
 
-// Add the new locale segment at the beginning
     newPathSegments.unshift(newLocale.toLowerCase());
 
     url.pathname = '/' + newPathSegments.join('/');
@@ -46,12 +42,11 @@ function getUrlForLocaleURLApi (currentUrl, newLocale) {
 
   } catch (e) {
     console.error('Error processing URL with URL API:', e);
-// Fallback or error handling
     return currentUrl;
   }
 }
 
-function setupMenuDropdowns() {
+function setupMenuDropdowns () {
   const navItems = document.querySelectorAll('.nav-item-wrapper');
 
   navItems.forEach(item => {
@@ -77,17 +72,51 @@ function setupMenuDropdowns() {
     });
   });
 
-  function openDropdown(item) {
+  function openDropdown (item) {
     const dropdown = item.querySelector('.nav-item__dropdown');
     item.classList.add('open');
     item.setAttribute('aria-expanded', 'true');
     dropdown.style.display = 'block';
   }
 
-  function closeDropdown(item) {
+  function closeDropdown (item) {
     const dropdown = item.querySelector('.nav-item__dropdown');
     item.classList.remove('open');
     item.setAttribute('aria-expanded', 'false');
     dropdown.style.display = 'none';
   }
+
+
+
+  // -------------------------------------
+  // Aria-expanded handling
+  // --------------------------------------
+
+  function handleAriaExpanded (e) {
+    const element = e.target;
+    const currentState = element.getAttribute('aria-expanded') === 'true';
+    element.setAttribute('aria-expanded', String(!currentState));
+  }
+
+  document.addEventListener('click', (e) => {
+    const element = e.target;
+    if (element.hasAttribute('aria-expanded')) {
+      handleAriaExpanded(e);
+    }
+  });
+
+  // Handle aria-expanded for modal buttons
+  window.addEventListener('modalchange', (e) => {
+    const modalElement = e.detail.element;
+    const modalButton = document.querySelector(`[data-modal-element='${modalElement}']`);
+    if (!modalButton) return;
+
+    const action = e.detail.action;
+    if (action === 'close') {
+      modalButton.setAttribute('aria-expanded', 'false');
+    } else {
+      modalButton.setAttribute('aria-expanded', 'true');
+    }
+
+  });
 }
