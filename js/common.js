@@ -1,8 +1,15 @@
+const toggleVisibility = window.ecomUtils.toggleVisibility;
+const CLOSE_TIMEOUT = 150;
+
 document.addEventListener('DOMContentLoaded', function () {
   setupLocaleListeners();
   setupMenuDropdowns();
-
+  setupHoverModals();
 });
+
+// -------------------------------------
+// Locale handling
+// --------------------------------------
 
 function setupLocaleListeners () {
   const localeLinks = document.querySelectorAll('[data-locale-link]');
@@ -29,7 +36,7 @@ function getUrlForLocaleURLApi (currentUrl, newLocale) {
 
     let newPathSegments = [...pathSegments];
 
-// Remove the existing locale segment if it was found
+    // Remove the existing locale segment if it was found
     if (existingLocale) {
       newPathSegments.shift();
     }
@@ -46,77 +53,162 @@ function getUrlForLocaleURLApi (currentUrl, newLocale) {
   }
 }
 
+// -------------------------------------
+// Menu dropdown handling
+// --------------------------------------
+
 function setupMenuDropdowns () {
   const navItems = document.querySelectorAll('.nav-item-wrapper');
 
   navItems.forEach(item => {
-    const dropdown = item.querySelector('.nav-item__dropdown');
+    const parent = item.parentElement;
+    const dropdown = parent.querySelector('.nav-item__dropdown');
+    let closeTimer;
 
     if (!dropdown) return;
+    item.addEventListener('mouseenter', () => {
+      handleDropdownAction(item);
+      clearTimeout(closeTimer);
+    });
 
-    // Open on mouse enter
-    item.addEventListener('mouseenter', () => openDropdown(item));
+    // Follow link on click
+    item.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.location.href = item.getAttribute('data-follow-link') || '#';
+    });
 
-    // Close on mouse leave
-    item.addEventListener('mouseleave', () => closeDropdown(item));
-
-    // Open on focus-in (keyboard navigation)
-    item.addEventListener('focusin', () => openDropdown(item));
-
-    // Close on focus-out (when tabbing away)
-    item.addEventListener('focusout', (e) => {
-      // Close only if focus moves outside the item
-      if (!item.contains(e.relatedTarget)) {
-        closeDropdown(item);
+    // Open and follow link if dropdown is open
+    item.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeDropdown(item, dropdown);
+      }
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        if (dropdown.classList.contains('open')) {
+          window.location.href = item.getAttribute('data-follow-link') || '#';
+        } else {
+          handleDropdownAction(item);
+        }
       }
     });
+
+    parent.addEventListener('focusout', (e) => {
+      setTimeout(() => {
+        if (!parent.contains(document.activeElement)) {
+          closeDropdown(item, dropdown);
+        }
+      }, 0);
+    });
+
+    parent.addEventListener('mouseleave', () => {
+      closeTimer = setTimeout(() => {
+        closeDropdown(item, dropdown);
+      }, CLOSE_TIMEOUT);
+    });
+
+    parent.addEventListener('mouseenter', () => {
+      clearTimeout(closeTimer);
+    });
+
   });
+}
 
-  function openDropdown (item) {
-    const dropdown = item.querySelector('.nav-item__dropdown');
-    item.classList.add('open');
-    item.setAttribute('aria-expanded', 'true');
-    dropdown.style.display = 'block';
+function handleDropdownAction (item) {
+  const dropdown = item.parentElement.querySelector('.nav-item__dropdown');
+  if (dropdown.classList.contains('open')) {
+    closeDropdown(item, dropdown);
+  } else {
+    openDropdown(item, dropdown);
   }
+}
 
-  function closeDropdown (item) {
-    const dropdown = item.querySelector('.nav-item__dropdown');
-    item.classList.remove('open');
-    item.setAttribute('aria-expanded', 'false');
-    dropdown.style.display = 'none';
+function openDropdown (item, dropdown) {
+  window.dispatchEvent(new Event('modalcloseall'));
+  item.setAttribute('aria-expanded', 'true');
+  toggleVisibility(dropdown, 'open');
+}
+
+function closeDropdown (item, dropdown) {
+  item.setAttribute('aria-expanded', 'false');
+  toggleVisibility(dropdown, 'close');
+}
+
+// -------------------------------------
+// Aria-expanded handling
+// --------------------------------------
+
+function handleAriaExpanded (e) {
+  const element = e.target;
+  const currentState = element.getAttribute('aria-expanded') === 'true';
+  element.setAttribute('aria-expanded', String(!currentState));
+}
+
+document.addEventListener('click', (e) => {
+  const element = e.target;
+  if (element.hasAttribute('aria-expanded')) {
+    handleAriaExpanded(e);
   }
+});
 
+// Handle aria-expanded for modal buttons
+window.addEventListener('modalchange', (e) => {
+  const modalElement = e.detail.element;
+  const modalButton = document.querySelector(`[data-modal-element='${modalElement}']`);
+  if (!modalButton) return;
 
-
-  // -------------------------------------
-  // Aria-expanded handling
-  // --------------------------------------
-
-  function handleAriaExpanded (e) {
-    const element = e.target;
-    const currentState = element.getAttribute('aria-expanded') === 'true';
-    element.setAttribute('aria-expanded', String(!currentState));
+  const action = e.detail.action;
+  if (action === 'close') {
+    modalButton.setAttribute('aria-expanded', 'false');
+  } else {
+    modalButton.setAttribute('aria-expanded', 'true');
   }
+});
 
-  document.addEventListener('click', (e) => {
-    const element = e.target;
-    if (element.hasAttribute('aria-expanded')) {
-      handleAriaExpanded(e);
+// -------------------------------------
+// Modal handling
+// --------------------------------------
+function setupHoverModals () {
+  const modalHoverTriggers = document.querySelectorAll('[data-modal-hover-open]');
+
+  modalHoverTriggers.forEach(trigger => {
+    const modalSelector = trigger.getAttribute('data-modal-element');
+    const modalElement = document.querySelector(modalSelector);
+    let closeTimer;
+
+    const openModal = () => {
+      clearTimeout(closeTimer);
+      trigger.click();
+    };
+
+    const startCloseTimer = () => {
+      clearTimeout(closeTimer);
+      closeTimer = setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('modalchange', {
+          detail: {
+            action: 'close',
+            initiator: trigger,
+            element: modalSelector
+          }
+        }));
+      }, CLOSE_TIMEOUT);
+    };
+
+    const cancelCloseTimer = () => {
+      clearTimeout(closeTimer);
+    };
+
+    trigger.addEventListener('mouseenter', openModal);
+    trigger.addEventListener('mouseleave', startCloseTimer);
+    trigger.addEventListener('click', (e) => {
+      if (modalElement.classList.contains('open')) {
+        e.preventDefault();
+        window.location.href = trigger.getAttribute('data-follow-link') || '#';
+      }
+    });
+
+    if (modalElement) {
+      modalElement.addEventListener('mouseenter', cancelCloseTimer);
+      modalElement.addEventListener('mouseleave', startCloseTimer);
     }
-  });
-
-  // Handle aria-expanded for modal buttons
-  window.addEventListener('modalchange', (e) => {
-    const modalElement = e.detail.element;
-    const modalButton = document.querySelector(`[data-modal-element='${modalElement}']`);
-    if (!modalButton) return;
-
-    const action = e.detail.action;
-    if (action === 'close') {
-      modalButton.setAttribute('aria-expanded', 'false');
-    } else {
-      modalButton.setAttribute('aria-expanded', 'true');
-    }
-
   });
 }

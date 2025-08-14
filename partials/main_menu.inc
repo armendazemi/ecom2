@@ -9,8 +9,12 @@
 
       {% include 'desktop_nav' %}
 
+
+      <div class="col-auto ms-auto">
+
+      </div>
+
       <div class="col-auto d-flex align-items-center column-gap-150 ms-auto">
-        {% include 'language_selector' %}
         {% include 'mobile_menu_toggle' %}
       </div>
     </div>
