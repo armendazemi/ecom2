@@ -1,8 +1,13 @@
 <toggle-button toggle-attributes="data-modal-action:open,close" class="d-lg-none">
   <button type="button" class="icon-button large radius-full"
-          aria-label="{{ "Öppna meny" | t }}" data-modal-overlay="false"
-          aria-expanded="false" aria-haspopup="true" aria-controls="mobile-menu"
-          data-modal-action="open" data-modal-element="#main-menu">
+          aria-label="{{ "Öppna meny" | t }}"
+          aria-expanded="false"
+          aria-haspopup="true"
+          aria-controls="mobile-menu"
+          data-action-toggle="true"
+          data-modal-overlay="false"
+          data-modal-action="open"
+          data-modal-element="#main-menu">
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
       <path
         d="M3.5 17.6347V16.135H20.5V17.6347H3.5ZM3.5 12.7502V11.2502H20.5V12.7502H3.5ZM3.5 7.86547V6.36572H20.5V7.86547H3.5Z"

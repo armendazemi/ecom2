@@ -175,9 +175,11 @@ function setupHoverModals () {
     const modalElement = document.querySelector(modalSelector);
     let closeTimer;
 
-    const openModal = () => {
+    const openModal = (e) => {
       clearTimeout(closeTimer);
-      trigger.click();
+      if (!modalElement.classList.contains('open')) {
+        trigger.click();
+      }
     };
 
     const startCloseTimer = () => {
@@ -200,6 +202,7 @@ function setupHoverModals () {
     trigger.addEventListener('mouseenter', openModal);
     trigger.addEventListener('mouseleave', startCloseTimer);
     trigger.addEventListener('click', (e) => {
+
       if (modalElement.classList.contains('open')) {
         e.preventDefault();
         window.location.href = trigger.getAttribute('data-follow-link') || '#';

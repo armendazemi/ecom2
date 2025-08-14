@@ -11,14 +11,14 @@
 
 
       <div class="col-auto ms-auto">
-
-      </div>
-
-      <div class="col-auto d-flex align-items-center column-gap-150 ms-auto">
-        {% include 'mobile_menu_toggle' %}
+        <div class="d-flex align-items-center">
+          {% include 'menu_cta_items' %}
+          {% include 'mobile_menu_toggle' %}
+        </div>
       </div>
     </div>
   </div>
 </nav>
 
+{% include 'search_modal' %}
 {% include 'mobile_nav' %}
