@@ -16,7 +16,7 @@
   {% if locale == "sv" %}
     <link href="https://ecom2.se/{{ request.path }}" rel="canonical">
   {% elsif locale == "en" %}
-    <link href="https://ecom2.se/en{{ request.path }}" rel="canonical">
+    <link href="https://ecom2.se/en/{{ request.path }}" rel="canonical">
   {% endif %}
   <link rel="alternate" hreflang="sv" href="https://ecom2.se/"/>
   <link rel="alternate" hreflang="en" href="https://ecom2.se/en"/>
@@ -36,7 +36,6 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
     rel="stylesheet">
-  {% comment %}<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"/>{% endcomment %}
 
   <!--- Styles --->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -50,7 +49,7 @@
 
 </head>
 <body class="">
-<a href="#main-content" class="brand-button-primary w-fit-content" id="skip-link">Skip to main content</a>
+<a href="#main-content" class="brand-button-primary w-fit-content" id="skip-link">{{ "Hoppa till huvudinnehåll" | t }}</a>
 
 <header class="main-header">
   {% include 'top_bar' %}
