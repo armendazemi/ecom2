@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
   setupLocaleListeners();
   setupMenuDropdowns();
   setupHoverModals();
+  setupImageFlip();
 });
 
 // -------------------------------------
@@ -213,5 +214,29 @@ function setupHoverModals () {
       modalElement.addEventListener('mouseenter', cancelCloseTimer);
       modalElement.addEventListener('mouseleave', startCloseTimer);
     }
+  });
+}
+
+function setupImageFlip () {
+  const productFlipCards = document.querySelectorAll('.product-card-flip');
+  if (!productFlipCards) return;
+
+  const productFlipCardsWithValues = Array.from(productFlipCards).filter((card) => {
+    const image = card.querySelector('.image-flip');
+    const backsideValue = image.getAttribute('data-backside-image');
+    return backsideValue && backsideValue.trim() !== '';
+  });
+
+  if (productFlipCardsWithValues.length === 0) return;
+  productFlipCardsWithValues.forEach(handleImageFlip);
+}
+
+function handleImageFlip (flipCard) {
+
+  flipCard.addEventListener('mouseenter', () => {
+    const image = flipCard.querySelector('.image-flip');
+    const backsideValue = image.getAttribute('data-backside-image');
+    console.log('Fetching new image for:', flipCard);
+    image.src = backsideValue;
   });
 }

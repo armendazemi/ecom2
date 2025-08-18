@@ -69,8 +69,9 @@ $text-brand-primary: $primary-800
 $text-brand-secondary: $secondary-700
 $text-brand-selected: $primary-1000
 $text-brand-secondary-hover: $secondary-800
+$text-error: $red-800
 
-$text-colors: (primary: $text-primary, secondary: $text-secondary, tertiary: $text-tertiary, inverse: $text-inverse, disabled: $text-disabled, white: $text-white, brand-primary: $text-brand-primary, brand-secondary: $text-brand-secondary, brand-secondary-hover: $text-brand-secondary-hover, brand-selected: $text-brand-selected)
+$text-colors: (primary: $text-primary, secondary: $text-secondary, tertiary: $text-tertiary, inverse: $text-inverse, disabled: $text-disabled, white: $text-white, brand-primary: $text-brand-primary, brand-secondary: $text-brand-secondary, brand-secondary-hover: $text-brand-secondary-hover, brand-selected: $text-brand-selected, error: $text-error)
 @each $name, $value in $text-colors
   .text-#{$name}
     color: $value !important
@@ -105,11 +106,15 @@ $background-brand-primary-hover: $primary-1000
 $background-brand-secondary: $secondary-300
 $background-brand-bold: $primary-1000
 $background-brand-subtle: $primary-300
-$background-brand-soft: $primary-200
+$background-brand-soft: $primary-300
+$background-brand-accent: $primary-400
 $background-brand-subtle-alpha: $primary-A100
 $background-brand-subtle-alpha-hover: $primary-A200
 
-$bg-colors: (default: $background-default, neutral: $background-neutral, neutral-hover: $background-neutral-hover, subtle-hover: $background-subtle-hover, disabled: $background-disabled, brand-primary: $background-brand-primary, brand-primary-hover: $background-brand-primary-hover, brand-secondary: $background-brand-secondary, brand-bold: $background-brand-bold, brand-subtle: $background-brand-subtle, brand-soft: $background-brand-soft, brand-subtle-alpha: $background-brand-subtle-alpha, brand-subtle-alpha-hover: $background-brand-subtle-alpha-hover)
+$background-error-bold: $red-700
+$background-error-bold-hover: $red-800
+
+$bg-colors: (default: $background-default, neutral: $background-neutral, neutral-hover: $background-neutral-hover, subtle-hover: $background-subtle-hover, disabled: $background-disabled, brand-primary: $background-brand-primary, brand-primary-hover: $background-brand-primary-hover, brand-secondary: $background-brand-secondary, brand-bold: $background-brand-bold, brand-subtle: $background-brand-subtle, brand-soft: $background-brand-soft, brand-accent: $background-brand-accent, brand-subtle-alpha: $background-brand-subtle-alpha, brand-subtle-alpha-hover: $background-brand-subtle-alpha-hover, error-bold: $background-error-bold, error-bold-hover: $background-error-bold-hover)
 @each $name, $value in $bg-colors
   .bg-#{$name}
     background-color: $value !important
@@ -742,7 +747,7 @@ button
 
 .footer-links
   a
-// @extend .footer-link
+    @extend .footer-link
 
 .brand-links
   a
@@ -827,32 +832,32 @@ a.left-arrow--brand,
 // @extend .default-table
 
 .section-padding-xsmall
-  padding-top: 24px
-  padding-bottom: 24px
+  padding-top: $space-300
+  padding-bottom: $space-300
   @media (min-width: 992px)
-    padding-top: 32px
-    padding-bottom: 32px
+    padding-top: $space-400
+    padding-bottom: $space-400
 
 .section-padding-small
-  padding-top: 32px
-  padding-bottom: 32px
+  padding-top: $space-400
+  padding-bottom: $space-400
   @media (min-width: 992px)
-    padding-top: 48px
-    padding-bottom: 48px
+    padding-top: $space-600
+    padding-bottom: $space-600
 
 .section-padding-medium
   padding-top: 40px
   padding-bottom: 40px
   @media (min-width: 992px)
-    padding-top: 64px
-    padding-bottom: 64px
+    padding-top: $space-800
+    padding-bottom: $space-800
 
 .section-padding-large
-  padding-top: 48px
-  padding-bottom: 48px
+  padding-top: $space-600
+  padding-bottom: $space-600
   @media (min-width: 992px)
-    padding-top: 96px
-    padding-bottom: 96px
+    padding-top: $space-1200
+    padding-bottom: $space-1200
 
 // ------------------------------
 // Global
@@ -927,6 +932,7 @@ a
     flex: 1
     height: 2px
     background: rgba(255, 255, 255, 0.60)
+    border-radius: 0 !important
 
 
   .swiper-pagination-bullet-active
@@ -968,6 +974,12 @@ a
   .rotate
     transform: rotate(180deg)
 
+
+.divider
+  width: 100%
+  height: 1px
+  background-color: $border-soft
+
 // ------------------------------
 // Components
 // ------------------------------
@@ -988,7 +1000,7 @@ modal-component
   overflow: auto
 
 .default-modal
-  width: min(100%, 500px)
+  width: min(100%, 450px)
   box-shadow: 0px 3px 3px -1.5px rgba(9, 30, 66, 0.04), 0px 8px 8px -4px rgba(9, 30, 66, 0.03), 0px 20px 24px -4px rgba(9, 30, 66, 0.08)
   top: 50%
   left: 50%
@@ -998,18 +1010,25 @@ modal-component
 .default-modal__header,
 .default-modal__content,
 .default-modal__footer
-  padding: $space-200
+  padding: 0 $space-300
 
 .default-modal__header
   display: flex
   align-items: center
   justify-content: space-between
+  padding-top: $space-300
+  padding-bottom: $space-150
+
+.default-modal__content
+  padding-bottom: $space-150
 
 .default-modal__footer
   display: flex
   align-items: center
   justify-content: flex-end
   gap: $space-150
+  padding-top: $space-150
+  padding-bottom: $space-300
 
 accordion-component,
 progress-accordion
@@ -1095,7 +1114,6 @@ progress-accordion
 
 .footer-link
   @extend %link-base
-  color: $secondary-300
   display: inline-flex
 
 .neutral-link
@@ -1127,15 +1145,14 @@ progress-accordion
   display: flex
   align-items: center
   justify-content: center
-  border-radius: $radius-full
-  border: 1px solid $border-brand
-  padding: $space-025 $space-125
-  @include fontSizePxToRem(14)
-  color: $text-brand-primary
+  border-radius: 0
+  padding: 0 $space-100
+  @include fontSizePxToRem(12)
+  color: $neutral-0
   font-weight: 500
-  letter-spacing: 0.2px
+  letter-spacing: 0.48px
   text-transform: uppercase
-  line-height: 20px
+  line-height: 150%
 
 
 // --------------------------
@@ -1326,8 +1343,39 @@ select
     .custom-swiper-grid__slides
       grid-area: 1 / 2 / 3 / 3
 
-//This is to prevent by the swiper slides when swiping
+// Prevent the slides to overlap the left-hand side column when swiping.
 .custom-swiper-grid__title,
 .custom-swiper-grid__controls
   background-color: $background-brand-soft
   z-index: 2
+
+// --------------------------
+// Blog Card
+// --------------------------
+.blog-card__link
+  text-decoration: none
+  display: flex
+  flex-direction: column
+  row-gap: $space-200
+
+  &:hover
+    .blog-card__heading
+      text-decoration: underline
+
+    .blog-card__image
+      img
+        transform: scale(1.05)
+
+.blog-card__image
+  overflow: hidden
+
+  img
+    object-fit: cover
+    width: 100%
+    aspect-ratio: 3/2
+    transition: transform 300ms ease-in-out
+
+.blog-card__content
+  display: flex
+  flex-direction: column
+  row-gap: $space-150
