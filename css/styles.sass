@@ -1379,3 +1379,55 @@ select
   display: flex
   flex-direction: column
   row-gap: $space-150
+
+// --------------------------
+// Product flip card
+// --------------------------
+.product-card-flip__image-wrapper
+  aspect-ratio: 1
+
+.product-card-flip__image-front,
+.product-card-flip__image-back
+  position: absolute
+  inset: 0
+  height: 100%
+  width: 100%
+  transition: opacity 300ms ease-in-out
+
+  &.close
+    display: none
+    opacity: 0
+    pointer-events: none
+
+// --------------------------
+// Collection card
+// --------------------------
+.collection-card
+  aspect-ratio: 3 / 4
+
+.collection-card__image-wrapper
+  background-color: rgb(3, 7, 18)
+  position: absolute
+  inset: 0
+
+
+.collection-card__image
+  height: 100%
+  width: 100%
+  object-fit: cover
+  opacity: .8
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

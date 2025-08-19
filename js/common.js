@@ -221,22 +221,29 @@ function setupImageFlip () {
   const productFlipCards = document.querySelectorAll('.product-card-flip');
   if (!productFlipCards) return;
 
-  const productFlipCardsWithValues = Array.from(productFlipCards).filter((card) => {
-    const image = card.querySelector('.image-flip');
-    const backsideValue = image.getAttribute('data-backside-image');
-    return backsideValue && backsideValue.trim() !== '';
+  const productFlipCardsWithBackImage = Array.from(productFlipCards).filter((card) => {
+    return card.querySelector('.product-card-flip__image-back');
   });
 
-  if (productFlipCardsWithValues.length === 0) return;
-  productFlipCardsWithValues.forEach(handleImageFlip);
+  if (productFlipCardsWithBackImage.length === 0) return;
+  productFlipCardsWithBackImage.forEach(handleImageFlip);
 }
 
 function handleImageFlip (flipCard) {
+  const backSideImage = flipCard.querySelector('.product-card-flip__image-back');
+  const frontSideImage = flipCard.querySelector('.product-card-flip__image-front');
 
   flipCard.addEventListener('mouseenter', () => {
-    const image = flipCard.querySelector('.image-flip');
-    const backsideValue = image.getAttribute('data-backside-image');
-    console.log('Fetching new image for:', flipCard);
-    image.src = backsideValue;
+    if (!backSideImage.getAttribute("src")) {
+      backSideImage.src = backSideImage.dataset.src;
+    }
+    window.ecomUtils.toggleVisibility(backSideImage, 'open');
+    window.ecomUtils.toggleVisibility(frontSideImage, 'close');
+
+  });
+
+  flipCard.addEventListener('mouseleave', () => {
+    window.ecomUtils.toggleVisibility(backSideImage, 'close');
+    window.ecomUtils.toggleVisibility(frontSideImage, 'open');
   });
 }
