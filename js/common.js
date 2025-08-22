@@ -8,51 +8,6 @@ document.addEventListener('DOMContentLoaded', function () {
   setupImageFlip();
 });
 
-// -------------------------------------
-// Locale handling
-// --------------------------------------
-
-function setupLocaleListeners () {
-  const localeLinks = document.querySelectorAll('[data-locale-link]');
-  const currentUrl = window.location.href;
-
-  localeLinks.forEach(link => {
-    link.addEventListener('click', (event) => {
-      event.preventDefault();
-      const newLocale = link.getAttribute('data-locale-link');
-      window.location.href = getUrlForLocaleURLApi(currentUrl, newLocale);
-    });
-  });
-}
-
-function getUrlForLocaleURLApi (currentUrl, newLocale) {
-  try {
-    const url = new URL(currentUrl);
-    const pathSegments = url.pathname.split('/').filter(segment => segment !== '');
-
-    let existingLocale = null;
-    if (pathSegments.length > 0 && /^[a-z]{2}$/i.test(pathSegments[0])) {
-      existingLocale = pathSegments[0].toLowerCase();
-    }
-
-    let newPathSegments = [...pathSegments];
-
-    // Remove the existing locale segment if it was found
-    if (existingLocale) {
-      newPathSegments.shift();
-    }
-
-    newPathSegments.unshift(newLocale.toLowerCase());
-
-    url.pathname = '/' + newPathSegments.join('/');
-
-    return url.toString();
-
-  } catch (e) {
-    console.error('Error processing URL with URL API:', e);
-    return currentUrl;
-  }
-}
 
 // -------------------------------------
 // Menu dropdown handling

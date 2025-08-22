@@ -537,10 +537,34 @@ button
     cursor: not-allowed
 
 
+.neutral-button-secondary
+  @extend %button-base
+  background-color: transparent
+  color: $text-primary
+  border: 1px solid $border-soft
+
+  &:hover
+    background-color: $background-subtle-hover
+
+  &:disabled,
+  &.disabled
+    pointer-events: none
+    background-color: transparent
+    border-color: $border-disabled
+    color: $text-disabled
+
+.category-button
+  @extend %button-base
+  background-color: $background-brand-soft
+  color: $text-primary
+
+  &.active
+    background-color: $neutral-1000
+    color: $text-inverse
+
 .clear-button
   @extend %button-base
   background-color: transparent
-  padding: 0
 
 .nav-button
   @extend %button-base
@@ -793,6 +817,9 @@ button
 
 .border-bottom-1--soft
   border-bottom: 1px solid $border-soft
+
+.border-soft--1
+  border: 1px solid $border-soft
 
 .rotate
   transition: transform 0.3s ease-in-out
@@ -1123,14 +1150,9 @@ progress-accordion
 // --------------------------
 // Breadcrumbs
 // --------------------------
-.breadcrumbs
-  display: flex
-  align-items: center
-  column-gap: $space-050
-  padding: $space-150 0
-
 .breadcrumb-link
-  @extend .neutral-link
+  @extend %link-base
+  @extend .all-caps
 
   &.active
     font-weight: 500
