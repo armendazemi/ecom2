@@ -1057,6 +1057,34 @@ modal-component
   padding-top: $space-150
   padding-bottom: $space-300
 
+
+.side-menu
+  position: fixed
+  top: 0
+  height: 100%
+  width: 80%
+  z-index: 1000
+  background: $neutral-0
+  transition: all 0.3s ease-in-out
+
+  &.open
+    transform: translateX(0)
+
+
+  @media (min-width: 992px)
+    width: 25%
+    min-width: 400px
+
+
+.side-menu--right
+  right: 0
+  transform: translateX(100%)
+
+
+.side-menu--left
+  left: 0
+  transform: translateX(-100%)
+
 accordion-component,
 progress-accordion
 
@@ -1142,6 +1170,11 @@ progress-accordion
 .footer-link
   @extend %link-base
   display: inline-flex
+  text-underline-offset: 10%
+
+  &:hover
+    text-decoration-thickness: 2px
+
 
 .neutral-link
   @extend %link-base
@@ -1275,10 +1308,9 @@ input[type=radio]
 
 
 select
-  padding: $space-100
+  padding: $space-125 $space-600 $space-125 $space-300
   border-radius: 0
-  border: 1px solid $border-bold
-  width: 100%
+  border: 1px solid $border-soft
   appearance: none
   background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none"><path d="M10.3345 12.7735L5.62305 8.06204L6.39701 7.28809L10.3345 11.2256L14.272 7.28809L15.046 8.06204L10.3345 12.7735Z" fill="%23030712"/></svg>')
   background-repeat: no-repeat

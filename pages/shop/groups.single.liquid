@@ -1,7 +1,8 @@
 {% include 'header' %}
 {% include 'shop_breadcrumbs' %}
 
-<section class="grp-heading padding-top-600 padding-top-lg-1200 padding-bottom-400 padding-bottom-lg-600">
+<section
+  class="grp-heading padding-top-600 padding-top-lg-1200 padding-bottom-400 padding-bottom-lg-600 overflow-hidden">
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-6">
@@ -39,7 +40,11 @@
   <div class="container">
     <div class="row">
       <div class="col d-flex flex-column flex-lg-row align-items-lg-center gap-150">
-        <button type="button" class="neutral-button-secondary">
+        <button type="button" class="neutral-button-secondary fw-regular"
+                data-modal-action="open"
+                data-modal-element="#filter-modal"
+
+        >
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path
               d="M11.0287 17.5C10.8162 17.5 10.6382 17.4281 10.4945 17.2843C10.3507 17.1404 10.2787 16.9622 10.2787 16.7498C10.2787 16.5371 10.3507 16.359 10.4945 16.2155C10.6382 16.0718 10.8162 16 11.0287 16H12.9615C13.174 16 13.3522 16.0719 13.496 16.2158C13.6397 16.3596 13.7115 16.5378 13.7115 16.7503C13.7115 16.9629 13.6397 17.141 13.496 17.2845C13.3522 17.4282 13.174 17.5 12.9615 17.5H11.0287ZM7.15375 12.75C6.94125 12.75 6.76317 12.6781 6.6195 12.5342C6.47583 12.3904 6.404 12.2122 6.404 11.9997C6.404 11.7871 6.47583 11.609 6.6195 11.4655C6.76317 11.3218 6.94125 11.25 7.15375 11.25H16.8365C17.049 11.25 17.2272 11.3219 17.371 11.4658C17.5147 11.6096 17.5865 11.7878 17.5865 12.0003C17.5865 12.2129 17.5147 12.391 17.371 12.5345C17.2272 12.6782 17.049 12.75 16.8365 12.75H7.15375ZM4.25 8C4.0375 8 3.85942 7.92808 3.71575 7.78425C3.57192 7.64042 3.5 7.46225 3.5 7.24975C3.5 7.03708 3.57192 6.859 3.71575 6.7155C3.85942 6.57183 4.0375 6.5 4.25 6.5H19.75C19.9625 6.5 20.1406 6.57192 20.2843 6.71575C20.4281 6.85958 20.5 7.03775 20.5 7.25025C20.5 7.46292 20.4281 7.641 20.2843 7.7845C20.1406 7.92817 19.9625 8 19.75 8H4.25Z"
@@ -52,12 +57,184 @@
         <span>{{ group.subtree_products.size }} {{ "produkter" | t }}</span>
       </div>
 
-      <div class="col d-flex align-items-center justify-content-end gap-150">
-        <span class="text-primary">{{ "Sortera efter" | t }}</span>
-        <button type="button" class="neutral-button-secondary">{{ "Populäritet" | t }}</button>
+      {% assign options = "name_asc,name_desc,price_asc,price_desc" | split: ',' %}
+      <div class="col d-flex align-items-start align-items-lg-center justify-content-end gap-150">
+        <label for="sort-by"
+               class="text-primary fw-regular d-none d-lg-block flex-shrink-0">{{ "Sortera efter" | t }}</label>
+        <select id="sort-by" name="Sort" class="flex-grow-1 flex-lg-grow-0 fw-regular"
+                aria-label="{{ "Sortera efter" | t }}">
+          <option value="{{ request.params.Sort }}" selected>
+            {{ request.params.Sort | t | fallback: "name_asc" | t }}
+          </option>
+          {% for option in options %}
+            {% if request.params.Sort %}
+              {% if option != request.params.Sort %}
+                <option value="{{ option }}">
+                  {{ option | t }}
+                </option>
+              {% endif %}
+
+            {% else %}
+              {% if option != 'name_asc' %}
+                <option value="{{ option }}">
+                  {{ option | t }}
+                </option>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </select>
       </div>
     </div>
   </div>
 </section>
+
+<section class="products-section padding-top-400 padding-top-lg-600 padding-bottom-600">
+  <div class="container">
+    <div class="row row-gap-300 row-gap-lg-400 products-row">
+      {% assign product_selection = group.subtree_products.filter.limit.3.paginate %}
+      {% include 'products_paginated' %}
+    </div>
+  </div>
+</section>
+
+
+<modal-component id="filter-modal" class="side-menu side-menu--left " trapfocus="true">
+  <div
+    class="filter-modal__header d-flex align-items-center justify-content-between padding-x-150 padding-x-lg-300 padding-y-200 border-bottom-1--soft">
+    <h2 class="h4">{{ "Filter" | t }}</h2>
+    <button type="button" class="icon-button" aria-label="{{ "Stäng filter" | t }}"
+            data-modal-action="close"
+            data-modal-element="#filter-modal">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
+        <path
+          d="M6.40043 19.1537L5.34668 18.0999L10.9467 12.4999L5.34668 6.89994L6.40043 5.84619L12.0004 11.4462L17.6004 5.84619L18.6542 6.89994L13.0542 12.4999L18.6542 18.0999L17.6004 19.1537L12.0004 13.5537L6.40043 19.1537Z"
+          fill="#030712"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="filter-modal__body">
+
+    {% for item in lists.filter-groups.rows %}
+      {% if item.group[0].id == group.id %}
+        {% if item.options == 'true' %}
+          {% for type in group.option_types %}
+            <accordion-component>
+              <button type="button" class="clear-button fw-regular">
+                {{ type.name }}
+                <svg class="rotate" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
+                     fill="none">
+                  <path
+                    d="M9.99576 12.5017C9.90645 12.5017 9.8234 12.4857 9.74659 12.4536C9.66978 12.4215 9.5993 12.3735 9.53513 12.3094L5.67201 8.44609C5.55201 8.32609 5.49409 8.19609 5.49826 8.05609C5.50256 7.91623 5.56506 7.78588 5.68576 7.66505C5.80659 7.54436 5.93562 7.48401 6.07284 7.48401C6.21006 7.48401 6.33909 7.54436 6.45992 7.66505L9.99992 11.2261L13.5608 7.66505C13.6762 7.54977 13.8039 7.49422 13.9439 7.49838C14.0837 7.50269 14.2141 7.56519 14.3349 7.68588C14.4556 7.80672 14.516 7.93575 14.516 8.07297C14.516 8.21019 14.4533 8.34116 14.3278 8.46588L10.4647 12.3094C10.395 12.3735 10.3217 12.4215 10.2449 12.4536C10.1681 12.4857 10.0851 12.5017 9.99576 12.5017Z"
+                    fill="#030712"/>
+                </svg>
+              </button>
+              <div class="dropdown">
+                <div class="d-flex flex-column row-gap-100 padding-bottom-300 filter-details__values">
+                  {% for value in type.values %}
+                    <label class="d-flex gap-base">
+                      <input
+                        class="checkbox-default checkbox--brand-primary"
+                        type="checkbox"
+                        name="filter[{{ type.name }}][]"
+                        value="{{ value.name }}"/>
+                      <span>{{ value.presentation }}</span>
+                    </label>
+                  {% endfor %}
+                </div>
+              </div>
+            </accordion-component>
+          {% endfor %}
+        {% endif %}
+
+        <!-- - end if item.alternativ == 'true' - -->
+
+        {% if item.properties == 'true' %}
+          {% assign used_product_properties = group.products.used_product_properties %}
+          {% for property in used_product_properties %}
+            {% if property.option_category.name == 'Filter' or property.option_category.name == 'filter' %}
+              <accordion-component>
+                <button type="button" class="clear-button fw-regular">
+                  {{ property.presentation }}
+                  <svg class="rotate" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
+                       fill="none">
+                    <path
+                      d="M9.99576 12.5017C9.90645 12.5017 9.8234 12.4857 9.74659 12.4536C9.66978 12.4215 9.5993 12.3735 9.53513 12.3094L5.67201 8.44609C5.55201 8.32609 5.49409 8.19609 5.49826 8.05609C5.50256 7.91623 5.56506 7.78588 5.68576 7.66505C5.80659 7.54436 5.93562 7.48401 6.07284 7.48401C6.21006 7.48401 6.33909 7.54436 6.45992 7.66505L9.99992 11.2261L13.5608 7.66505C13.6762 7.54977 13.8039 7.49422 13.9439 7.49838C14.0837 7.50269 14.2141 7.56519 14.3349 7.68588C14.4556 7.80672 14.516 7.93575 14.516 8.07297C14.516 8.21019 14.4533 8.34116 14.3278 8.46588L10.4647 12.3094C10.395 12.3735 10.3217 12.4215 10.2449 12.4536C10.1681 12.4857 10.0851 12.5017 9.99576 12.5017Z"
+                      fill="#030712"/>
+                  </svg>
+                </button>
+                <div class="dropdown">
+                  <div class="d-flex flex-column row-gap-100 padding-bottom-300 filter-details__values">
+                    {% for value in property.values %}
+                      <label class="d-flex gap-base">
+                        <input
+                          class="checkbox-default checkbox--brand-primary"
+                          type="checkbox"
+                          name="filter[{{ property.name }}][]"
+                          value="{{ value.name }}"/>
+                        <span>{{ value.presentation }}</span>
+                      </label>
+                    {% endfor %}
+                  </div>
+                </div>
+              </accordion-component>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+        <!-- - end if item.egenskaper == 'true' - -->
+
+        {% if item.brands == 'true' %}
+          {% assign brands_group = group.groups_with_products_in_common.include_subtree.children_of_varumarken %}
+          {{ brands_group.size }} --- {{ group.name }}
+          {% assign brands_sort = brands_group | sort: "name" %}
+          <accordion-component>
+            <button type="button" class="clear-button fw-regular">
+              {{ "Varumärken" | t }}
+              <svg class="rotate" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
+                   fill="none">
+                <path
+                  d="M9.99576 12.5017C9.90645 12.5017 9.8234 12.4857 9.74659 12.4536C9.66978 12.4215 9.5993 12.3735 9.53513 12.3094L5.67201 8.44609C5.55201 8.32609 5.49409 8.19609 5.49826 8.05609C5.50256 7.91623 5.56506 7.78588 5.68576 7.66505C5.80659 7.54436 5.93562 7.48401 6.07284 7.48401C6.21006 7.48401 6.33909 7.54436 6.45992 7.66505L9.99992 11.2261L13.5608 7.66505C13.6762 7.54977 13.8039 7.49422 13.9439 7.49838C14.0837 7.50269 14.2141 7.56519 14.3349 7.68588C14.4556 7.80672 14.516 7.93575 14.516 8.07297C14.516 8.21019 14.4533 8.34116 14.3278 8.46588L10.4647 12.3094C10.395 12.3735 10.3217 12.4215 10.2449 12.4536C10.1681 12.4857 10.0851 12.5017 9.99576 12.5017Z"
+                  fill="#030712"/>
+              </svg>
+            </button>
+            <div class="dropdown">
+              <div class="d-flex flex-column row-gap-100 padding-bottom-300 filter-details__values">
+                {% for brand in brands_sort %}
+                  <label class="d-flex gap-base">
+                    <input
+                      class="checkbox-default checkbox--brand-primary"
+                      type="checkbox"
+                      name="groups[brands][]"
+                      value="{{ brand.id }}"/>
+                    <span>{{ brand.name }}</span>
+                  </label>
+                {% endfor %}
+              </div>
+            </div>
+          </accordion-component>
+        {% endif %}
+
+      {% endif %}
+    {% endfor %}
+  </div>
+</modal-component>
+
+
+<script>
+  const select = document.getElementById('sort-by');
+
+  // Preselect current value from URL
+  const params = new URLSearchParams(window.location.search);
+  if (params.has('Sort')) {
+    select.value = params.get('Sort');
+  }
+
+  // Update query params on change
+  select.addEventListener('change', () => {
+    const p = new URLSearchParams(window.location.search);
+    p.set('Sort', select.value);
+    window.location.search = p.toString(); // reload with new params
+  });
+</script>
 
 {% include 'footer' %}
