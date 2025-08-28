@@ -1,5 +1,5 @@
 </main>
-<footer class="section-padding-large bg-brand-accent">
+<footer class="section-padding-large bg-brand-accent mt-auto">
   <div class="container">
     <div class="row">
       <div class="col-12">

@@ -12,10 +12,13 @@
 
     <div class="container">
       <div class="row">
-        <form action="/s" class="col d-flex align-items-center column-gap-150">
+        <form action="{% if locale != "sv" %}/{{ locale }}{% endif %}/catalog/products"
+              class="col d-flex align-items-center column-gap-150">
           <input type="search"
                  placeholder="{{ 'Sök efter...' | t }}"
-                 name="q"
+                 name="search"
+                 minlength="3"
+                 value="{{ request.params.search }}"
                  class="search-input w-100"
                  aria-label="{{ 'Search' | t }}"
                  aria-describedby="search-modal-title">

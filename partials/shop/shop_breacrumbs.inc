@@ -28,6 +28,11 @@
             </li>
           {% endif %}
 
+
+          {% for grp in product.groups.breadcrumbs_for_sortiment %}
+            {{ grp.name }}
+          {% endfor %}
+
           {% if product.id %}
             {% for ancestor in product.groups.breadcrumbs_for_sortiment %}
               {% if ancestor.visible %}

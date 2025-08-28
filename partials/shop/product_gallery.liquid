@@ -1,0 +1,121 @@
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.0/dist/fancybox/fancybox.css"/>
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@6.0/dist/fancybox/fancybox.umd.js" defer></script>
+
+{% assign imageCounter = 1 %}
+
+<div class="product-gallery">
+  <a href="{{ product.first_image.large }}" data-thumb-src="{{ product.first_image.small }}" data-fancybox="gallery"
+     class="product-gallery__main-item">
+    <img class="aspect-1 h-100 w-100 object-fit-cover" src="{{ product.first_image.medium }}" alt="{{ product.name }}"
+         height="608" width="608"
+         loading="eager"
+         fetchpriority="high">
+  </a>
+
+  {% if product.images.size > 1 %}
+    {% for image in product.images %}
+      {% unless forloop.first %}
+        {% assign imageCounter = imageCounter | plus: 1 %}
+        <a href="{{ image.large }}" data-thumb-src="{{ image.small }}" data-fancybox="gallery"
+           class="product-gallery__item d-block">
+          <img class="aspect-1 h-100 w-100 object-fit-cover" src="{{ image.medium }}"
+               alt="{{ product.name }} - {{ forloop.index }}" height="298"
+               width="298"
+               loading="lazy" decoding="async">
+        </a>
+      {% endunless %}
+    {% endfor %}
+  {% endif %}
+</div>
+
+<div class="d-lg-none d-flex align-items-center justify-content-center column-gap-150 margin-top-50">
+  <button type="button" class="icon-button large" data-direction="previous" aria-label="{{ "Föregående bild" | t }}">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path
+        d="M10.4534 12L14.5267 16.073C14.665 16.2115 14.7358 16.3856 14.7392 16.5953C14.7423 16.8048 14.6715 16.982 14.5267 17.127C14.3817 17.2718 14.206 17.3443 13.9997 17.3443C13.7933 17.3443 13.6177 17.2718 13.4727 17.127L8.97841 12.6328C8.88491 12.5391 8.81891 12.4403 8.78041 12.3365C8.74191 12.2327 8.72266 12.1205 8.72266 12C8.72266 11.8795 8.74191 11.7673 8.78041 11.6635C8.81891 11.5597 8.88491 11.4609 8.97841 11.3673L13.4727 6.873C13.6112 6.73467 13.7852 6.66384 13.9949 6.6605C14.2044 6.65734 14.3817 6.72817 14.5267 6.873C14.6715 7.018 14.7439 7.19367 14.7439 7.4C14.7439 7.60634 14.6715 7.782 14.5267 7.927L10.4534 12Z"
+        fill="#030712"/>
+    </svg>
+  </button>
+
+  <div class="">
+
+    <span class="product-gallery__image-counter">1</span>/{{ imageCounter }}
+  </div>
+
+  <button type="button" class="icon-button large" data-direction="next" aria-label="{{ "Nästa bild" | t }}">
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
+      <path
+        d="M13.4467 12L9.3735 7.92701C9.23517 7.78851 9.16433 7.61443 9.161 7.40476C9.15783 7.19526 9.22867 7.01801 9.3735 6.87301C9.5185 6.72818 9.69417 6.65576 9.9005 6.65576C10.1068 6.65576 10.2825 6.72818 10.4275 6.87301L14.9217 11.3673C15.0152 11.4609 15.0813 11.5597 15.1198 11.6635C15.1583 11.7673 15.1775 11.8795 15.1775 12C15.1775 12.1205 15.1583 12.2327 15.1198 12.3365C15.0813 12.4403 15.0152 12.5391 14.9217 12.6328L10.4275 17.127C10.289 17.2653 10.1149 17.3362 9.90525 17.3395C9.69575 17.3427 9.5185 17.2718 9.3735 17.127C9.22867 16.982 9.15625 16.8063 9.15625 16.6C9.15625 16.3937 9.22867 16.218 9.3735 16.073L13.4467 12Z"
+        fill="#030712"/>
+    </svg>
+  </button>
+</div>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    Fancybox.bind('[data-fancybox]', {});
+
+    const productGalleryMain = document.querySelector('.product-gallery');
+    const imageCounterElement = document.querySelector('.product-gallery__image-counter');
+    const imagesCount = productGalleryMain.querySelectorAll('img');
+    const imageWidth = imagesCount[0].clientWidth;
+
+    if (imagesCount.length <= 1) {
+      return;
+    }
+
+    function updateImageGalleryCounter (e) {
+      const target = e.target;
+      const scrollLeft = target.scrollLeft;
+
+      const rest = scrollLeft % imageWidth;
+
+      if (rest === 0) {
+        const currentIndex = Math.floor(scrollLeft / imageWidth);
+        imageCounterElement.textContent = String(currentIndex + 1);
+      }
+    }
+
+    const debouncedUpdateImageGalleryCounter = debouncer(updateImageGalleryCounter, 100);
+    productGalleryMain.addEventListener('scroll', debouncedUpdateImageGalleryCounter);
+    productGalleryMain.addEventListener('touchmove', debouncedUpdateImageGalleryCounter);
+
+
+    function handleScrollButtons (direction) {
+      const currentScroll = productGalleryMain.scrollLeft;
+      let newScroll;
+
+      if (direction === 'next') {
+        newScroll = currentScroll + imageWidth;
+      } else {
+        newScroll = currentScroll - imageWidth;
+      }
+
+      productGalleryMain.scrollTo({
+        left: newScroll,
+        behavior: 'smooth'
+      });
+    }
+
+    const scrollButtons = document.querySelectorAll('button[data-direction]');
+    scrollButtons.forEach((button) => {
+      button.addEventListener('click', (e) => {
+        const direction = e.currentTarget.getAttribute('data-direction');
+        handleScrollButtons(direction);
+      });
+    });
+
+    function debouncer (func, timeout) {
+      let timer;
+      return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => { func.apply(this, args); }, timeout);
+      };
+    }
+  });
+
+
+</script>
