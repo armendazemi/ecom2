@@ -42,7 +42,7 @@
 
 {% capture hasContent %}{{ 'collections-title' | has_page_editable }}{% endcapture %}
 {% if hasContent == 'true' %}
-  <section class="section-padding-large collections">
+  <section class="section-padding-large collections row-gap-300">
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-6">
@@ -50,7 +50,7 @@
         </div>
       </div>
 
-      <div class="row margin-top-400 margin-top-lg-600">
+      <div class="row margin-top-400 margin-top-lg-600 row-gap-300">
         {% for item in lists.featured-groups-start.rows %}
           <div class="col-lg-4">
             <div class="collection-card position-relative text-white">
@@ -104,7 +104,7 @@
           <div class="col-lg">
             <div class="usp-item d-flex text-white text-center flex-column justify-content-center row-gap-200">
               <div class="usp-item__icon">
-                <img src="{{ usp.icon }}" alt=" " height="32" width="32">
+                <img src="{{ usp.icon }}" alt="" height="32" width="32">
               </div>
               <h3 class="display-xxs">{{ usp.title }}</h3>
               {{ usp.description }}

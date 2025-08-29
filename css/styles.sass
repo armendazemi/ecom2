@@ -70,8 +70,9 @@ $text-brand-secondary: $secondary-700
 $text-brand-selected: $primary-1000
 $text-brand-secondary-hover: $secondary-800
 $text-error: $red-800
+$text-campaign: $red-800
 
-$text-colors: (primary: $text-primary, secondary: $text-secondary, tertiary: $text-tertiary, inverse: $text-inverse, disabled: $text-disabled, white: $text-white, brand-primary: $text-brand-primary, brand-secondary: $text-brand-secondary, brand-secondary-hover: $text-brand-secondary-hover, brand-selected: $text-brand-selected, error: $text-error)
+$text-colors: (primary: $text-primary, secondary: $text-secondary, tertiary: $text-tertiary, inverse: $text-inverse, disabled: $text-disabled, white: $text-white, brand-primary: $text-brand-primary, brand-secondary: $text-brand-secondary, brand-secondary-hover: $text-brand-secondary-hover, brand-selected: $text-brand-selected, error: $text-error, campaign: $text-campaign)
 @each $name, $value in $text-colors
   .text-#{$name}
     color: $value !important
@@ -826,6 +827,9 @@ button
   @media (min-width: 992px)
     border-left: 1px solid $border-brand
 
+.border-top-1--soft
+  border-top: 1px solid $border-soft
+
 .border-bottom-1--soft
   border-bottom: 1px solid $border-soft
 
@@ -1105,7 +1109,11 @@ progress-accordion
     display: none
     height: 0
     overflow: hidden
-    transition: height 300ms ease-in-out
+    opacity: 0
+    transition: all 300ms ease-in-out
+
+    &.open
+      opacity: 1
 
     &.show
       display: block !important
@@ -1114,6 +1122,10 @@ progress-accordion
   &:has(.open)
     .rotate
       transform: rotate(180deg)
+
+  .dropdown__content
+    p
+      margin-bottom: 1rem
 
 .overlay
   display: none
@@ -1144,9 +1156,6 @@ progress-accordion
   &:focus,
   &:active
     top: 0
-
-range-slider
-
 
 .range-slider-price
   padding: 0 !important
@@ -1194,6 +1203,21 @@ range-slider
   transform: translateY(-50%)
   right: 12px
 
+variant-quantity
+  flex: 0 0 auto
+
+.variant-quantity__wrapper
+  display: flex
+  align-items: center
+  border: 1px solid $border-bold
+
+  button, span
+    display: flex
+    align-items: center
+    justify-content: center
+    flex: 0 0 auto
+    height: 40px
+    width: 40px
 
 // --------------------------
 // LINKS TABS & BREADCRUMBS$
@@ -1515,6 +1539,7 @@ select
     opacity: 0
     pointer-events: none
 
+
 // --------------------------
 // Collection card
 // --------------------------
@@ -1535,7 +1560,7 @@ select
 
 
 // --------------------------
-// Product Gallery
+// Product Single
 // --------------------------
 .product-gallery__item,
 .product-gallery__main-item
@@ -1576,10 +1601,34 @@ select
       width: 100%
       height: 100%
 
+.product-single__properties
+  display: flex
+  gap: $space-050
+
+  span:not(:last-child)
+    padding-right: $space-050
+    border-right: 1px solid currentColor
 
 
+.product-single__price
+  font-weight: 500 !important
+  font-size: 1.5rem !important
+  @media (min-width: 992px)
+    font-size: 2rem !important
 
 
+.product-seo-section__hidden-content
+  max-height: 0
+  opacity: 0
+  overflow: hidden
+  transition: all 300ms ease-in-out
+
+  &.open
+    opacity: 1
+
+  &.show
+    opacity: 1
+    max-height: unset
 
 
 

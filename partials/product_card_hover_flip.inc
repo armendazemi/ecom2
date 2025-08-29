@@ -10,11 +10,11 @@
 
     {%- comment -%} 30 days in seconds = 60*60*24*30 = 2592000 {%- endcomment -%}
     {% if diff < 2592000 and diff >= 0 %}
-      <span class="default-badge bg-brand-bold">New</span>
+      <span class="default-badge bg-brand-bold">{{ "Nyhet" | t }}</span>
     {% endif %}
 
     {% if prod.prices.default.amount > prod.prices.current.amount %}
-      <span class="default-badge bg-error-bold">Sale</span>
+      <span class="default-badge bg-error-bold">{{ "Rea" | t }}</span>
     {% endif %}
   </div>
   <a class="d-flex flex-column row-gap-200 text-decoration-none" href="{{ prod.url }}"

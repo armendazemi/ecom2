@@ -64,7 +64,7 @@
           {% if admin %}
             <div class="col-lg-6">
               <div class="d-flex flex-column row-gap-200">
-                {{ 'cta-banner-image' | page_editable }}
+                {{ 'cta-banner-image' | global_editable }}
                 <p class="subtitle-1 text-white">This image will replace the background once outside of editmode.</p>
               </div>
             </div>

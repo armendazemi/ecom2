@@ -158,7 +158,7 @@
 
       {% assign used_product_properties = products.used_product_properties %}
       {% for property in used_product_properties %}
-        {% if property.option_category.name == 'Filter' or property.option_category.name == 'filter' %}
+        {% if property.option_category.name contains 'Filter' %}
           <accordion-component class="d-block margin-x-300 border-bottom-1--soft">
             <button type="button"
                     class="clear-button fw-regular padding-y-300 justify-content-between w-100 h-auto padding-x-0">

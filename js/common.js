@@ -8,6 +8,51 @@ document.addEventListener('DOMContentLoaded', function () {
   setupImageFlip();
 });
 
+// -------------------------------------
+// Locale handling
+// --------------------------------------
+
+function setupLocaleListeners () {
+  const localeLinks = document.querySelectorAll('[data-locale-link]');
+  const currentUrl = window.location.href;
+
+  localeLinks.forEach(link => {
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      const newLocale = link.getAttribute('data-locale-link');
+      window.location.href = getUrlForLocaleURLApi(currentUrl, newLocale);
+    });
+  });
+}
+
+function getUrlForLocaleURLApi (currentUrl, newLocale) {
+  try {
+    const url = new URL(currentUrl);
+    const pathSegments = url.pathname.split('/').filter(segment => segment !== '');
+
+    let existingLocale = null;
+    if (pathSegments.length > 0 && /^[a-z]{2}$/i.test(pathSegments[0])) {
+      existingLocale = pathSegments[0].toLowerCase();
+    }
+
+    let newPathSegments = [...pathSegments];
+
+    // Remove the existing locale segment if it was found
+    if (existingLocale) {
+      newPathSegments.shift();
+    }
+
+    newPathSegments.unshift(newLocale.toLowerCase());
+
+    url.pathname = '/' + newPathSegments.join('/');
+
+    return url.toString();
+
+  } catch (e) {
+    console.error('Error processing URL with URL API:', e);
+    return currentUrl;
+  }
+}
 
 // -------------------------------------
 // Menu dropdown handling
@@ -99,12 +144,12 @@ function handleAriaExpanded (e) {
   element.setAttribute('aria-expanded', String(!currentState));
 }
 
-document.addEventListener('click', (e) => {
-  const element = e.target;
-  if (element.hasAttribute('aria-expanded')) {
-    handleAriaExpanded(e);
-  }
-});
+// document.addEventListener('click', (e) => {
+//   const element = e.target;
+//   if (element.hasAttribute('aria-expanded')) {
+//     handleAriaExpanded(e);
+//   }
+// });
 
 // Handle aria-expanded for modal buttons
 window.addEventListener('modalchange', (e) => {
@@ -188,17 +233,20 @@ function handleImageFlip (flipCard) {
   const backSideImage = flipCard.querySelector('.product-card-flip__image-back');
   const frontSideImage = flipCard.querySelector('.product-card-flip__image-front');
 
-  flipCard.addEventListener('mouseenter', () => {
-    if (!backSideImage.getAttribute("src")) {
-      backSideImage.src = backSideImage.dataset.src;
-    }
-    window.ecomUtils.toggleVisibility(backSideImage, 'open');
-    window.ecomUtils.toggleVisibility(frontSideImage, 'close');
+  // only attach hover listeners if the device supports hover
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    flipCard.addEventListener('mouseenter', () => {
+      if (!backSideImage.getAttribute('src')) {
+        backSideImage.src = backSideImage.dataset.src;
+      }
+      window.ecomUtils.toggleVisibility(backSideImage, 'open');
+      window.ecomUtils.toggleVisibility(frontSideImage, 'close');
 
-  });
+    });
 
-  flipCard.addEventListener('mouseleave', () => {
-    window.ecomUtils.toggleVisibility(backSideImage, 'close');
-    window.ecomUtils.toggleVisibility(frontSideImage, 'open');
-  });
+    flipCard.addEventListener('mouseleave', () => {
+      window.ecomUtils.toggleVisibility(backSideImage, 'close');
+      window.ecomUtils.toggleVisibility(frontSideImage, 'open');
+    });
+  }
 }
