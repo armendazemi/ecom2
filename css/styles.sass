@@ -787,7 +787,7 @@ button
 
 .brand-links
   a
-// @extend .brand-link
+    @extend .brand-link
 
 
 .cta-400-spacing
@@ -901,6 +901,8 @@ a.left-arrow--brand,
     padding-top: $space-1200
     padding-bottom: $space-1200
 
+.top--header-height
+  top: var(--header-height)
 // ------------------------------
 // Global
 // ------------------------------
@@ -924,8 +926,8 @@ body
 
   *
     &:focus-visible
-      box-shadow: 0 0 0 2px $blue-700
-      transition: box-shadow 0.2s ease-out
+      box-shadow: 0 0 0 2px $blue-700 !important
+      transition: box-shadow 0.2s ease-out !important
 
 
 header
@@ -1017,7 +1019,6 @@ a
   .rotate
     transform: rotate(180deg)
 
-
 .divider
   width: 100%
   height: 1px
@@ -1101,6 +1102,27 @@ modal-component
 .side-menu--left
   left: 0
   transform: translateX(-100%)
+
+
+.added-to-cart-toast
+  display: none
+  width: 100%
+  position: fixed
+  top: -10%
+  right: 0
+  opacity: 0
+  padding: $space-300
+  background-color: $neutral-0
+  border: $border-soft
+  box-shadow: 0 3px 3px -1.5px rgba(9, 30, 66, 0.04), 0 8px 8px -4px rgba(9, 30, 66, 0.03), 0 20px 24px -4px rgba(9, 30, 66, 0.08)
+  transition: all 300ms ease-in-out
+  @media (min-width: 992px)
+    width: 450px
+
+  &.open
+    top: var(--header-height)
+    opacity: 1
+
 
 accordion-component,
 progress-accordion
@@ -1219,6 +1241,15 @@ variant-quantity
     height: 40px
     width: 40px
 
+variant-quantity[disabled]
+  .variant-quantity__wrapper
+    border-color: $border-disabled
+    background-color: $background-disabled
+    color: $text-disabled
+
+    button
+      cursor: not-allowed
+
 // --------------------------
 // LINKS TABS & BREADCRUMBS$
 // --------------------------
@@ -1235,10 +1266,10 @@ variant-quantity
 
 .brand-link
   @extend %link-base
-  color: $text-brand-secondary
+  color: $text-primary
 
   &:hover
-    color: $text-brand-secondary-hover
+    text-decoration-thickness: 2px
 
   &:visited
     color: $text-brand-selected
@@ -1300,6 +1331,16 @@ variant-quantity
 // INPUTS
 // --------------------------
 
+.was-validated
+  input:invalid,
+  textarea:invalid,
+  select:invalid
+    border-color: $error-foreground !important
+
+    &:focus-visible,
+    &:active
+      border-color: $error-foreground !important
+
 %base-input
   display: flex
   align-items: center
@@ -1309,9 +1350,9 @@ variant-quantity
   padding: 0 $space-150
   height: 44px
   min-width: 0
-  border: 1px solid $border-bold
+  border: 1px solid $border-bold !important
   color: $text-primary
-  outline: none
+  outline: none !important
 
   &:hover
     background-color: $background-subtle-hover
@@ -1601,7 +1642,9 @@ select
       width: 100%
       height: 100%
 
-.product-single__properties
+.product-single__properties,
+.added-to-cart-toast__product-variant,
+.order-item__properties
   display: flex
   gap: $space-050
 

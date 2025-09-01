@@ -49,6 +49,24 @@
             <span
               class="breadcrumb-link text-primary active">{{ product.name }}</span>
             </li>
+
+          {% elsif isCartView %}
+            <li class="d-flex align-items-center gap-50">
+              <span
+                class="breadcrumb-link text-primary active">{{ "Varukorg" | t }}</span>
+            </li>
+
+          {% elsif isCheckoutView %}
+            <li>
+              <a href="{{ cart.url }}" class="breadcrumb-link text-primary">{{ "Varukorg" | t }}</a>
+            </li>
+
+            <span>/</span>
+
+            <li class="d-flex align-items-center gap-50">
+              <span
+                class="breadcrumb-link text-primary active">{{ "Checkout" | t }}</span>
+            </li>
           {% endif %}
         </ul>
       </nav>

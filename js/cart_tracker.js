@@ -54,7 +54,7 @@ function setCartState (data) {
 
 async function handleVariantRemove (event) {
   const variantId = event.target.getAttribute('data-variant-id');
-  const cards = document.querySelectorAll('.product-card-cart-preview[data-variant-id="' + variantId + '"]');
+  const cards = document.querySelectorAll('.order-item[data-variant-id="' + variantId + '"]');
   const url = '/w/cart/order_items?associations[]=variant';
 
   if (window._klarnaCheckout && window.location.href.includes('/w/checkout')) {
@@ -85,37 +85,18 @@ async function handleVariantRemove (event) {
   const data = await response.json();
 
   // Update Klarna widget and redirect to cart page (if empty) only if we are on the checkout page
-  if (window.location.href.includes('/w/checkout')) {
+  if (window.location.href.includes('/w/cart')) {
 
     if (data.order_items.length === 0) {
       window.location.href = '/w/cart';
       return;
     }
 
-    const paymentResponse = await fetch('/w/checkout/payment', {
-      mehtod: 'GET',
-      headers: {
-        Accept: 'application/json',
-      },
+    cards.forEach((card) => {
+      card.remove();
     });
-
-    if (!paymentResponse.ok) {
-      console.error('Failed to update payment');
-      return;
-    }
-
-    if (window._klarnaCheckout) {
-      _klarnaCheckout((api) => {
-        api.resume();
-      });
-    }
+    setCartState(data);
   }
-
-  cards.forEach((card) => {
-    card.remove();
-  });
-  setCartState(data);
-  checkForPotentialCartRedirect(data);
 }
 
 function checkForPotentialCartRedirect (data) {

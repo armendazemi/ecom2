@@ -1,0 +1,27 @@
+{% include 'header' %}
+{% assign isCheckoutView = true %}
+{% include 'shop_breadcrumbs' %}
+
+
+<section class="padding-top-600 padding-top-lg-1200 padding-bottom-400 padding-bottom-lg-600 bg-brand-accent">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <h1 class="display-md text-center">{{ "Checkout" | t }}</h1>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="padding-y-600 padding-y-lg-1200">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        {{ snippet }}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% include 'footer' %}

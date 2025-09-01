@@ -54,11 +54,29 @@
       </div>
     </div>
 
+    {% if product.option_types[0] %}
+      <div class="product-single__selection">
+        <select class="default-select w-100" title="{{ "Välj" | t }} {{ product.option_types[0].presentation }}"
+                aria-label="{{ "Välj" | t }} {{ product.option_types[0].presentation }}"
+                name="option-{{ product.option_types[0].name }}">
+          <option
+            class="default-select__option"
+            value=""
+            selected
+            disabled>{{ "Välj" | t }} {{ product.option_types[0].presentation }}</option>
+          {% for option_value in product.option_types[0].values %}
+            <option value="{{ option_value.variant_id }}">{{ option_value.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    {% endif %}
+
     <div class="product-single__cta d-flex column-gap-150 align-items-start">
       {% if lists.global-settings.rows[0].quantity_selector == "true" %}
         {% include 'quantity_selector' %}
       {% endif %}
       <button type="submit" class="brand-button-primary w-100">{{ "Lägg till" | t }}</button>
+      {% include 'side_cart' %}
     </div>
 
     {% if lists.product-usp.rows.size > 0 %}
