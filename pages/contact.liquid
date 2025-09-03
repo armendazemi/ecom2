@@ -1,0 +1,149 @@
+{% include 'header' %}
+{% include 'page_breadcrumbs' %}
+
+
+<section class="section-padding-large">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="d-flex flex-column row-gap-200">
+          {{ 'contact-eyebrow' | page_editable: class: 'eyebrow display-subheading' }}
+          {{ 'contact-heading' | page_editable: class: 'display-xl-heading p-color-secondary' }}
+        </div>
+      </div>
+    </div>
+
+    <div class="row row-gap-300 margin-top-400 margin-top-lg-600">
+      {% for i in (1..3) %}
+        {% assign editableName = 'contact-square' | append: forloop.index %}
+        {% capture hasContent %}{{ editableName | has_page_editable }}{% endcapture %}
+        {% if hasContent == 'true' %}
+          <div class="col-12 col-lg">
+            {{ editableName | page_editable: class: "contact-square bg-brand-accent padding-400 padding-lg-600 display-sm-heading brand-links d-flex flex-column row-gap-200" }}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+
+<section class="section-padding-large bg-brand-accent">
+  <div class="container">
+    <div class="row align-items-center row-gap-400">
+      <div class="col-lg-6 padding-right-lg-300">
+        <div class="d-flex flex-column row-gap-400">
+          {{ 'contact-callout' | page_editable: class: 'display-md-heading p-color-secondary d-flex flex-column row-gap-200' }}
+          <div class="row row-gap-200">
+            <div class="col-lg-6">
+              {{ 'contact-callout-column-1' | page_editable: class: 'display-xs-heading p-color-secondary d-flex flex-column row-gap-150' }}
+            </div>
+            <div class="col-lg-6">
+              {{ 'contact-callout-column-2' | page_editable: class: 'display-xs-heading p-color-secondary d-flex flex-column row-gap-150' }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6 padding-left-lg-300">
+        {{ 'contact-callout-image' | page_editable: class: 'callout-image aspect-3-2--editable' }}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-padding-large">
+  <div class="container">
+    <div class="row justify-content-center row-gap-400 row-gap-lg-600">
+      <div class="col-lg-8">
+        <div class="d-flex flex-column row-gap-200 text-center">
+          {{ 'contact-form-heading' | page_editable: class: 'display-md-heading p-color-secondary' }}
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <form-component action="/forms/kontakt" method="post" modal="#contactModal">
+          <div class="d-flex flex-column row-gap-300">
+            <div class="row row-gap-300">
+              <div class="col-lg-6">
+                <label for="firstName">{{ "Förnamn" | t }}</label>
+                <input class="input-default w-100 form-control" type="text" id="firstName" name="Förnamn" required>
+                <div class="invalid-feedback">
+                  {{ "Ange ditt förnamn" | t }}
+                </div>
+              </div>
+
+              <div class="col-lg-6">
+                <label for="lastName">{{ "Efternamn" | t }}</label>
+                <input class="input-default w-100 form-control" type="text" id="lastName" name="Efternamn" required>
+              </div>
+              <div class="invalid-feedback">
+                {{ "Ange ditt efternamn" | t }}
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label for="email">{{ "Email" | t }}</label>
+              <input class="input-default w-100 form-control" type="email" id="email" name="Email" required>
+              <div class="invalid-feedback">
+                {{ "Ange din email" | t }}
+              </div>
+            </div>
+
+            <div class="col-12">
+              <label for="message">{{ "Meddelande" | t }}</label>
+              <textarea id="message" class="textarea-default padding-150 w-100 form-control" name="Meddelande" rows="4"
+                        placeholder="{{ "Skriv ditt meddlande..." | t }}" required></textarea>
+              <div class="invalid-feedback">
+                {{ "Vänlig skriv vad det gäller" | t }}
+              </div>
+            </div>
+
+            <div class="form-check d-flex align-items-center column-gap-75 flex-wrap">
+              <input class="form-check-input" type="checkbox" name="policyAccept" id="policyAccept" required>
+              <label class="form-check-label mb-0 text-md fw-regular" for="policyAccept">
+                {{ "Jag godkänner" | t }} <a class="brand-link d-inline-flex" target="_blank"
+                                             href="{% if locale != "sv" %}/{{ locale }}{% endif %}/policy">{{ "villkoren" | t }}</a>
+              </label>
+              <div class="invalid-feedback w-100">
+                {{ "Du måste gokänna våra villkor" | t }}
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-center">
+              <button type="submit" class="brand-button-primary">{{ "Skicka" | t }}</button>
+            </div>
+          </div>
+
+        </form-component>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% assign centerImageLayout = true %}
+{% include 'full_image_bg_cta' %}
+
+
+<modal-component id="contactModal" class="default-modal bg-white">
+  <div class="default-modal__header ">
+    <h2 class="display-xs ">{{ "Kontakt titel" | t }}</h2>
+    <button type="button" data-modal-action="close" data-modal-element="#contactModal"
+            class="icon-button large added-to-cart-toast__close-btn"
+            aria-label="{{ "Stäng modalen för kontakt" | t }}">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path
+          d="M6.99952 8.05376L1.92652 13.127C1.78802 13.2653 1.61394 13.3362 1.40427 13.3395C1.19477 13.3427 1.01752 13.2718 0.872524 13.127C0.72769 12.982 0.655273 12.8063 0.655273 12.6C0.655273 12.3937 0.72769 12.218 0.872524 12.073L5.94577 7.00001L0.872524 1.92701C0.73419 1.78851 0.663357 1.61443 0.660023 1.40476C0.656857 1.19526 0.72769 1.01801 0.872524 0.873012C1.01752 0.728178 1.19319 0.655762 1.39952 0.655762C1.60586 0.655762 1.78152 0.728178 1.92652 0.873012L6.99952 5.94626L12.0725 0.873012C12.211 0.734678 12.3851 0.663845 12.5948 0.660512C12.8043 0.657345 12.9815 0.728178 13.1265 0.873012C13.2714 1.01801 13.3438 1.19368 13.3438 1.40001C13.3438 1.60635 13.2714 1.78201 13.1265 1.92701L8.05327 7.00001L13.1265 12.073C13.2649 12.2115 13.3357 12.3856 13.339 12.5953C13.3422 12.8048 13.2714 12.982 13.1265 13.127C12.9815 13.2718 12.8059 13.3443 12.5995 13.3443C12.3932 13.3443 12.2175 13.2718 12.0725 13.127L6.99952 8.05376Z"
+          fill="#030712"/>
+      </svg>
+    </button>
+  </div>
+  <div class="default-modal__content">
+    <p class="text-secondary">{{ "Kontakt brödtext" | t }}</p>
+  </div>
+  <div class="default-modal__footer">
+    <button type="button" class="brand-button-primary" data-modal-action="close"
+            data-modal-element="#contactModal">{{ "Stäng" | t }}</button>
+  </div>
+</modal-component>
+{% include 'footer' %}

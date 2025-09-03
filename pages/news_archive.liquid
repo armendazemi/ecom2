@@ -1,0 +1,35 @@
+{% include 'header' %}
+{% include 'page_breadcrumbs' %}
+
+<section
+  class="padding-top-600 padding-top-lg-1200 padding-bottom-400 padding-bottom-lg-600 overflow-hidden">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        <div class="d-flex flex-column row-gap-300 text-center">
+          {{ 'contact-eyebrow' | page_editable: class: 'eyebrow display-subheading' }}
+          {{ 'contact-heading' | page_editable: class: 'display-xxl-heading p-color-secondary' }}
+        </div>
+      </div>
+
+      {{ site.articles_categories | docify }}
+      <div class="col-12">
+        <swiper-slider slides="auto" spaceBetween="12">
+          <div class="swiper swiper-container d-flex justify-content-center w-fit-content">
+            <div class="swiper-wrapper">
+              {% for category in si %}
+                <div class="swiper-slide w-fit-content">
+                  <button type="button" class="category-button">
+                    {{ category.name }}
+                  </button>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </swiper-slider>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% include 'footer' %}

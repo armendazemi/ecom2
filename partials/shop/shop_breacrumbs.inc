@@ -67,6 +67,11 @@
               <span
                 class="breadcrumb-link text-primary active">{{ "Checkout" | t }}</span>
             </li>
+          {% elsif isProfile %}
+            <li class="d-flex align-items-center gap-50">
+              <span
+                class="breadcrumb-link text-primary active">{{ "Min profil" | t }}</span>
+            </li>
           {% endif %}
         </ul>
       </nav>

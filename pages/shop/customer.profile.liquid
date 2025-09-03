@@ -1,0 +1,101 @@
+{% unless customer.logged_in? %}
+  <script>
+    window.location.href = "{{ customer.login_url }}";
+  </script>
+{% endunless %}
+{% include 'header' %}
+{% assign isProfile = true %}
+{% include 'shop_breadcrumbs' %}
+
+
+<section class="padding-top-600 padding-top-lg-1200 padding-bottom-400 padding-bottom-lg-600">
+  <div class="container">
+    <div class="row justify-content-between align-items-end row-gap-200">
+      <div class="col-lg-auto">
+        <h1 class="display-md">{{ "Välkommen" }}</h1>
+        <p
+          class="text-secondary">{{ "Här är ditt konto. Härifrån kan du se din orderhistorik och uppdatera dinauppgifter." }}</p>
+      </div>
+
+      <div class="col-auto ">
+        <a href="{{ customer.logout_url }}" class="neutral-button-secondary">{{ "Logga ut" | t }}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="">
+  <div class="container padding-bottom-600 padding-top-lg-1200">
+    <div class="row">
+      <div class="col-12 d-lg-none">
+        <div class="divider"></div>
+      </div>
+      <div class="col-lg-4 padding-right-lg-600  padding-top-400 padding-top-lg-600 border-top-1-lg--soft">
+        <ul class="profile-navigation list-unstyled d-flex flex-column row-gap-100">
+          <li role="presentation">
+            <button type="button" class="category-button active"
+                    data-pane-target="order-history">{{ "Orderhistorik" | t }}</button>
+          </li>
+          <li role="presentation">
+            <button type="button" class="category-button"
+                    data-pane-target="customer-details">{{ "Mina uppgifter" | t }}</button>
+          </li>
+        </ul>
+      </div>
+
+      <div
+        class="col-lg-8 padding-left-lg-600 padding-top-400 padding-top-lg-600 border-top-1-lg--soft border-left-1-lg--soft">
+        <div class="customer-profile-panes">
+          <div class="profile-content__order-history customer-profile-pane open" data-pane="order-history">
+            <div class="d-flex flex-column row-gap-100">
+
+              <h2 class="display-xs">{{ "Orderhistorik" | t }}</h2>
+              {% if customer.orders.size > 1 %}
+                <p class="text-secondary">{{ "Se dina senaste ordrar." | t }}</p>
+              {% else %}
+              <p class="text-secondary">{{ "Du har inga ordrar ännu." | t }}</p>
+            </div>
+            {% endif %}
+          </div>
+          <div class="profile-content__user-details customer-profile-pane" data-pane="customer-details">
+            <div class="d-flex flex-column row-gap-300">
+              <div class="d-flex flex-column row-gap-100">
+                <h2 class="display-xs">{{ "Mina uppgifter" | t }}</h2>
+                <p class="text-secondary">{{ "Uppdatera dina kontouppgifter här." | t }}</p>
+              </div>
+              {% include 'user_form' %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const panesButtons = document.querySelectorAll('button[data-pane-target]');
+    panesButtons.forEach(button => button.addEventListener('click', handlePaneDisplay));
+  });
+
+  function handlePaneDisplay (e) {
+    const paneSelector = e.target.getAttribute('data-pane-target');
+    const paneElement = document.querySelector(`.customer-profile-pane[data-pane="${paneSelector}"]`);
+    const currentActivePaneElement = document.querySelector('.customer-profile-pane.open');
+
+    if (paneElement === currentActivePaneElement) {
+      return;
+    }
+    window.ecomUtils.toggleVisibility(currentActivePaneElement, 'close');
+    window.ecomUtils.toggleVisibility(paneElement, 'open');
+
+    const buttons = document.querySelectorAll('button[data-pane-target]');
+    buttons.forEach(button => button.classList.remove('active'));
+    e.target.classList.add('active');
+
+  }
+</script>
+
+{% include 'footer' %}

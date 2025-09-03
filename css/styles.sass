@@ -788,7 +788,7 @@ button
 .brand-links
   a
     @extend .brand-link
-
+    display: inline-block !important
 
 .cta-400-spacing
   p:has(a,button)
@@ -808,6 +808,10 @@ button
 .border-top-1-lg--brand
   @media (min-width: 992px)
     border-top: 1px solid $border-brand
+
+.border-top-1-lg--soft
+  @media (min-width: 992px)
+    border-top: 1px solid $border-soft
 
 .border-top-1--inverse
   border-top: 1px solid $neutral-0
@@ -835,6 +839,10 @@ button
 
 .border-soft--1
   border: 1px solid $border-soft
+
+.border-left-1-lg--soft
+  @media (min-width: 992px)
+    border-left: 1px solid $border-soft
 
 .rotate
   transition: transform 0.3s ease-in-out
@@ -903,6 +911,7 @@ a.left-arrow--brand,
 
 .top--header-height
   top: var(--header-height)
+
 // ------------------------------
 // Global
 // ------------------------------
@@ -956,6 +965,15 @@ h1, h2, h3, h4, h5, h6, p
 
 .aspect-1
   aspect-ratio: 1
+
+.aspect-3-2
+  aspect-ratio: 3 / 2
+
+.aspect-3-2--editable
+  img
+    aspect-ratio: 3 / 2
+    object-fit: cover
+    width: 100%
 
 a
   color: unset
@@ -1023,6 +1041,10 @@ a
   width: 100%
   height: 1px
   background-color: $border-soft
+
+
+.editable
+  min-width: 40px
 
 // ------------------------------
 // Components
@@ -1250,6 +1272,28 @@ variant-quantity[disabled]
     button
       cursor: not-allowed
 
+
+.form-status-pending
+  button[type=submit]
+    position: relative
+    pointer-events: none
+
+    &::after
+      content: ''
+      width: 20px
+      height: 20px
+      border: 4px solid #FFF
+      border-top-color: transparent
+      border-radius: 50%
+      animation: spin 1s linear infinite
+
+@keyframes spin
+  to
+    transform: rotate(360deg)
+
+  from
+    transform: rotate(0deg)
+
 // --------------------------
 // LINKS TABS & BREADCRUMBS$
 // --------------------------
@@ -1415,11 +1459,13 @@ input[type="search"]::-webkit-search-results-decoration
   display: none
 
 %check-radio-base
-  accent-color: $foreground-primary
-  height: 20px
-  width: 20px
+  accent-color: $foreground-primary !important
+  height: 20px !important
+  width: 20px !important
   padding: 0 !important
-  border-color: $border-bold
+  border-color: $border-bold !important
+  -webkit-appearance: unset
+  appearance: auto
 
   &:disabled,
   &.disabled
@@ -1674,7 +1720,17 @@ select
     max-height: unset
 
 
+// --------------------------
+// Customer Profile
+// --------------------------
+.customer-profile-pane
+  display: none
+  opacity: 0
+  transition: all 300ms ease-in-out
 
+  &.open
+    display: block
+    opacity: 1
 
 
 

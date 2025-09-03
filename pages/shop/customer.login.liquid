@@ -1,9 +1,14 @@
 {% include 'header' %}
 
+<script src="{{ 'form_test.js' | template_path }}?{{ version }}" defer></script>
+
 <section class="section-padding-large">
   <div class="container">
     <div class="row flex-column align-items-center justify-content-center row-gap-400 row-gap-lg-400">
       <div class="col-lg-5">
+        <div class="flash-message d-none" role="alert" aria-live="polite">
+        </div>
+
         <div class="d-flex flex-column align-items-center row-gap-150 ">
           <h1 class="display-md">{{ "Logga in" | t }}</h1>
           <p class="text-secondary">{{ "Fyll i dina inloggningsuppgifter nedan" | t }}</p>
@@ -11,7 +16,8 @@
       </div>
 
       <div class="col-lg-5">
-        <form-component action="{{ customer.login_url }}" method="post" id="login-page-form"
+        <form-component action="{{ customer.login_url }}" method="post" id="login-page-form" accept="application/json"
+                        redirect="/" no-clear
                         class="d-flex flex-column row-gap-400 needs-validation" novalidate>
           <div class="input-group has-validation d-flex flex-column">
             <label for="email">{{ "Email" | t }}</label>
@@ -71,7 +77,26 @@
         passwordInput.type = 'password';
       }
     });
+
+    const formTest = document.getElementById('login-page-form');
+    const formComponent = formTest.closest('form-component');
+    formComponent.addEventListener(('form:response'), checkFormResponse);
   });
+
+  async function checkFormResponse (e) {
+    try {
+      const data = await e.detail.json();
+      if (data.error) {
+        const flashMessage = document.querySelector('.flash-message');
+        flashMessage.classList.remove('d-none');
+        flashMessage.classList.add('alert', 'alert-danger');
+        flashMessage.textContent = window.getTranslation(data.error);
+      }
+    } catch (error) {
+      console.error('Error parsing JSON:', error);
+
+    }
+  }
 </script>
 
 {% include 'footer' %}
