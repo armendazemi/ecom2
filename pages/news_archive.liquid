@@ -1,5 +1,6 @@
 {% include 'header' %}
 {% include 'page_breadcrumbs' %}
+{% assign articlesToShow = 1 %}
 
 <section
   class="padding-top-600 padding-top-lg-1200 padding-bottom-400 padding-bottom-lg-600 overflow-hidden">
@@ -12,21 +13,59 @@
         </div>
       </div>
 
-      {{ site.articles_categories | docify }}
-      <div class="col-12">
-        <swiper-slider slides="auto" spaceBetween="12">
-          <div class="swiper swiper-container d-flex justify-content-center w-fit-content">
-            <div class="swiper-wrapper">
-              {% for category in si %}
-                <div class="swiper-slide w-fit-content">
-                  <button type="button" class="category-button">
-                    {{ category.name }}
-                  </button>
+      <div class="d-flex flex-column row-gap-lg-600 row-gap-400">
+        <div class="col-12">
+          <swiper-slider slides="auto" spaceBetween="12">
+            <div class="swiper swiper-container d-flex justify-content-center w-fit-content">
+              <div class="swiper-wrapper">
+                {% for category in site.article_categories.all %}
+                  <div class="swiper-slide w-fit-content">
+                    <button type="button" class="category-button">
+                      {{ category.name }}
+                    </button>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </swiper-slider>
+        </div>
+
+        <div class="col-12">
+          <div class="row row-gap-lg-600 row-gap-400">
+            {% for article in articles.paginate[articlesToShow] %}
+              <div class="col-lg-6 col-xl-4">
+                {% assign blogImage = article.preview %}
+                {% assign blogLink = article.url %}
+                {% assign blogEyebrow = article.categories[0].name %}
+                {% assign blogHeading = article.title %}
+                {% assign blogText = article.preview_text %}
+                {% include 'blog_card' %}
+              </div>
+            {% endfor %}
+
+
+            <div class="col-md-12">
+              {% assign totalArticles = articles.all.count %}
+              {% assign totalPages = totalArticles | divided_by: articlesToShow %}
+              {% assign rest = totalArticles | modulo: articlesToShow %}
+              {% if rest > 0 %}
+                {% assign totalPages = totalPages | plus: 1 %}
+              {% endif %}
+              <div
+                class="pagination pagination--articles d-flex justify-content-end align-items-center">
+                <span
+                  class="margin-right-150">{{ "Sida" | t }} {{ request.params["page"] | fallback: 1 }} / {{ totalPages }}</span>
+                <div class="article-paginate article-paginate__newer">
+                  {{ 'Nyare' | paginate_previous_link }}
                 </div>
-              {% endfor %}
+
+                <div class="article-paginate article-paginate__older">
+                  {{ 'Äldre' | paginate_next_link }}
+                </div>
+              </div>
             </div>
           </div>
-        </swiper-slider>
+        </div>
       </div>
     </div>
   </div>
