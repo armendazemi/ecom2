@@ -912,6 +912,41 @@ a.left-arrow--brand,
 .top--header-height
   top: var(--header-height)
 
+
+.editable-wrapper
+  div
+    display: flex
+    flex-direction: column
+    row-gap: $space-150
+
+  h1
+    @extend .display-lg
+
+  h2
+    @extend .display-md
+
+  h3
+    @extend .display-sm
+
+  h4, h5, h6
+    @extend .display-xs
+
+  ul
+    display: flex
+    flex-direction: column
+    row-gap: $space-150
+
+  table
+    width: 100%
+    border-collapse: collapse
+
+    th, td
+      text-align: left
+      padding: $space-125 $space-150
+
+    tr:nth-child(even)
+      background-color: $background-brand-accent
+
 // ------------------------------
 // Global
 // ------------------------------

@@ -1,0 +1,105 @@
+{% include 'header' %}
+{% include 'page_breadcrumbs' %}
+
+<section class="padding-top-600 padding-top-lg-1200 padding-bottom-400 padding-bottom-lg-600">
+  <div class="container">
+    <div class="row justify-content-center row-gap-400 row-gap-lg-600">
+      <div class="col-lg-6">
+        <div class="d-flex flex-column row-gap-300 text-center">
+          <div class="article-categories d-flex align-items-center justify-content-center gap-150 flex-wrap">
+            {% for cat in article.categories %}
+              <span class="display-subheading">{{ cat.name }}</span>
+            {% endfor %}
+          </div>
+          <h1 class="display-xxl">{{ article.title }}</h1>
+
+          <div class="d-flex align-items-center justify-content-center gap-100 flex-wrap">
+            {% if article.account.full_name.size > 0 %}
+              <span class="article-author">{{ article.account.full_name }}</span>
+              <span>•</span>
+            {% endif %}
+            <span class="article-published-date">{{ article.published_at | date: "%b %d, %Y" }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-8">
+        <div class="article-image">
+          <img class="aspect-3-2 w-100 object-fit-cover" src="{{ article.preview }}" alt="" loading="eager"
+               decoding="async">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="padding-bottom-600 padding-bottom-lg-1200">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="article-content aspect-3-2--editable editable-wrapper">
+          {{ article_editable | class: 'd-flex flex-column row-gap-150' }}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{% if article.products.size > 0 %}
+  <section class="section-padding-large bg-brand-accent">
+    <div class="container">
+      <div class="row justify-content-center row-gap-400 row-gap-lg-600">
+        <div class="col-lg-8">
+          <h2 class="display-lg text-center">{{ "Relaterade produkter" | t }}</h2>
+        </div>
+        <div class="col-12">
+          <swiper-slider slides="1.2" slidesDesktop="3">
+            <div class="swiper swiper-container">
+              <div class="swiper-wrapper">
+                {% for prod in article.products %}
+                  <div class="swiper-slide">
+                    {% include 'product_card_hover_flip' %}
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </swiper-slider>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+
+<section class="section-padding-large">
+  <div class="container">
+    <div class="row justify-content-center row-gap-400 row-gap-lg-600">
+      <div class="col-lg-8">
+        <h2 class="display-lg text-center">{{ "Senaste artiklar" | t }}</h2>
+      </div>
+      <div class="col-12">
+        <div class="row row-gap-400 row-gap-lg-600">
+          {% for article in articles.all.3 %}
+            {% assign blogImage = article.preview %}
+            {% assign blogLink = article.url %}
+            {% assign blogEyebrow = article.categories[0].name %}
+            {% assign blogHeading = article.title %}
+            {% assign blogText = article.preview_text %}
+            <div class="col-lg-4">
+              {% include 'blog_card' %}
+            </div>
+          {% endfor %}
+
+          <div class="col-12">
+            <a href="{% if locale != "sv" %}/{{ locale }}/nyhetsarkiv{% endif %}"
+               class="brand-button-primary mx-auto w-fit-content">{{ "Se alla" | t }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% include 'footer' %}

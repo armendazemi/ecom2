@@ -1,0 +1,30 @@
+{% include 'header' %}
+{% include 'page_breadcrumbs' %}
+
+<section class="padding-top-600 padding-top-lg-1200 padding-bottom-400 padding-bottom-lg-600 bg-brand-accent">
+  <div class="container">
+    <div class="row justify-content-center row-gap-400 row-gap-lg-600">
+      <div class="col-lg-6">
+        <div class="d-flex flex-column row-gap-300 text-center">
+          {{ 'main-eyebrow' | page_editable: class: 'eyebrow display-subheading' }}
+          <h1 class="display-xxl">{{ page.title }}</h1>
+          {{ 'main-text' | page_editable: class: 'p-color-secondary' }}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="section-padding-large">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        {{ 'main' | page_editable: class: 'd-flex flex-column row-gap-150 editable-wrapper aspect-3-2--editable' }}
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{% include 'footer' %}
