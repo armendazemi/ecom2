@@ -1,10 +1,17 @@
-//--------------------------
-// Primitive Color Variables
-// --------------------------
-
 // Fixes CLS issues with stacking swiper-slides prior to JS init
 .swiper-wrapper
   display: flex
+
+  .swiper-slide
+    display: none
+    flex-shrink: 0
+
+    &:first-of-type
+      display: block
+
+//--------------------------
+// Primitive Color Variables
+// --------------------------
 
 // Neutral Colors
 $neutral-1000: #030712
