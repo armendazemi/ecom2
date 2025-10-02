@@ -1,13 +1,13 @@
 {% assign currentDate = "now" | date %}
 <section class="hero {{ currentDate }}">
-  <swiper-slider slides="1" pagination=".swiper-pagination--white" autoplay="true" delay="5000" fade="true" loop="true">
+  <swiper-slider slides="1" pagination=".swiper-pagination--white" autoplay="true" delay="30000" fade="true" loop="true">
     <div class="swiper swiper-container">
       <div class="swiper-wrapper">
         {% for item in lists.hero-slider-start.rows %}
           {% assign itemStartDate = item.start_date | date | fallback: "1900-01-01 00:00"%}
           {% assign itemEndDate = item.end_date | date | fallback: "2100-12-30 00:00" %}
           {% if itemStartDate < currentDate and itemEndDate > currentDate %}
-            <div class="swiper-slide position-relative">
+            <div class="swiper-slide position-relative" {%unless forloop.first%}style="display: none;{%endunless%}">
               <div class="hero__image-overlay position-absolute inset-0 alpha-neutral-400A"></div>
               <picture>
                 <source
