@@ -10,7 +10,7 @@
           </li>
           {% if group.id %}
             {% for ancestor in group.path %}
-              {% if ancestor.visible and ancestor.id != group.id %}
+              {% if ancestor.visible and ancestor.id != group.id  and  ancestor.name != "Sortiment"%}
                 <li class="d-flex align-items-center gap-50">
                   <a href="{{ ancestor.url }}"
                      class="breadcrumb-link text-primary">{{ ancestor.name }}</a>
@@ -28,14 +28,9 @@
             </li>
           {% endif %}
 
-
-          {% for grp in product.groups.breadcrumbs_for_sortiment %}
-            {{ grp.name }}
-          {% endfor %}
-
           {% if product.id %}
             {% for ancestor in product.groups.breadcrumbs_for_sortiment %}
-              {% if ancestor.visible %}
+              {% if ancestor.visible? and ancestor.name != "Sortiment"%}
                 <li class="d-flex align-items-center gap-50">
                   <a href="{{ ancestor.url }}"
                      class="breadcrumb-link text-primary">{{ ancestor.name }}</a>
@@ -46,6 +41,7 @@
               {% endif %}
             {% endfor %}
             <li class="d-flex align-items-center gap-50">
+              <span>/</span>
             <span
               class="breadcrumb-link text-primary active">{{ product.name }}</span>
             </li>

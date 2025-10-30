@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
-  <title>{{ title | t | fallback: seo.title }} {%if request.params.page%} | {{"Sida"|t}} {{request.params.page}}{% endif %}</title>
+  <title>{{ title | t | fallback: seo.title }} {% if request.params.page %} | {{ "Sida" | t }} {{ request.params.page }}{% endif %}</title>
   <meta name="description" content="{{ seo.description | fallback: "Fokus, Sveriges största webbutik" | t }}">
   <meta name="keywords" content="{{ seo.keywords }}">
 
@@ -14,12 +14,21 @@
   <meta property="og:image" content="{{ page.og_image }}"/>
 
   {% if locale == "sv" %}
-    <link href="https://ecom2.se{{ request.path }}{%if request.params.page%}?page={{request.params.page}}{% endif %}" rel="canonical">
-  {% elsif locale == "en" %}
-    <link href="https://ecom2.se/en{{ request.path }}{%if request.params.page%}?page={{request.params.page}}{% endif %}" rel="canonical">
+    <link href="{{ request.base_url }}{{ request.path }}" rel="canonical">
+  {% else %}
+    <link href="{{ request.base_url }}/{{ locale }}{{ request.path }}" rel="canonical">
   {% endif %}
-  <link rel="alternate" hreflang="sv" href="https://ecom2.se/"/>
-  <link rel="alternate" hreflang="en" href="https://ecom2.se/en"/>
+
+  {% for locale in site.locales %}
+    {% if locale != site.default_locale %}
+      <link rel="alternate" hreflang="{{ locale }}"
+            href="{{ request.base_url }}/{{ locale }}{{ request.path }}{% if request.params.page %}?page={{ request.params.page }}{% endif %}"/>
+    {% endif %}
+  {% endfor %}
+
+  <link rel="alternate" hreflang="{{ site.default_locale }}"
+        href="{{ request.base_url }}{{ request.path }}{% if request.params.page %}?page={{ request.params.page }}{% endif %}"/>
+  <link rel="alternate" hreflang="x-default" href="{{ request.base_url }}/">
 
   <link rel="icon" href="{{ 'favicon.png' | asset_path }}">
 
@@ -29,12 +38,13 @@
 
   <link rel="alternate" type="application/rss+xml" href="/{{ locale }}/a.rss" title="RSS Feed">
   <!--- Preload the first hero mobile image to improve mobile performance --->
-  <link rel="preload" as="image" href="{{lists.hero-slider-start.rows[0].background_image_mobile}}" type="image/webp" fetchpriority="high">
+  <link rel="preload" as="image" href="{{ lists.hero-slider-start.rows[0].background_image_mobile }}" type="image/webp"
+        fetchpriority="high">
 
   {% assign version = "version=1.0" %}
 
   <!--- Preloads --->
-  <link rel="reload" as="image" href="{{lists.hero-slider-start.rows[0].background_image_mobile}}">
+  <link rel="reload" as="image" href="{{ lists.hero-slider-start.rows[0].background_image_mobile }}">
   <link rel="preload" as="style" href="{{ 'styles.css' | template_path }}?{{ version }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -53,9 +63,8 @@
   <link href="{{ 'styles.css' | template_path }}?{{ version }}" rel="stylesheet">
 
 
-
   <!---- Scripts --->
-
+  <script src="{{ 'cart_tracker.js' | template_path }}?{{ version }}" defer></script>
   <script src="{{ 'common.js' | template_path }}?{{ version }}" defer></script>
   <script src="{{ 'locale_changer.component.js' | template_path }}?{{ version }}" async></script>
 
@@ -74,20 +83,21 @@
     };
 
     window.hasRecaptcha = {{ site.has_recaptcha_enabled }};
-    window.recaptcha_public_key = "{{site.recaptcha_public_key}}"
+    window.recaptcha_public_key = "{{ site.recaptcha_public_key }}";
     window.ecomConfig = {
-      priceCurrency: "{%if locale == "sv"%}SEK{%else%}EUR{%endif%}",
-      priceLocale: "{%if locale == "sv"%}sv-SE{%else%}de-DE{%endif%}",
+      priceCurrency: "{% if locale == "sv" %}SEK{% else %}EUR{% endif %}",
+      priceLocale: "{% if locale == "sv" %}sv-SE{% else %}de-DE{% endif %}",
       priceMinDecimalDigits: 0,
       priceMaxDecimalDigits: 2
-    }
+    };
 
   </script>
 
 
 </head>
 <body class="">
-<a href="#main-content" class="brand-button-primary w-fit-content" id="skip-link">{{ "Hoppa till huvudinnehåll" | t }}</a>
+<a href="#main-content" class="brand-button-primary w-fit-content"
+   id="skip-link">{{ "Hoppa till huvudinnehåll" | t }}</a>
 
 <header class="main-header">
   {% include 'top_bar' %}

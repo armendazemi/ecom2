@@ -6,20 +6,20 @@
 
 {% for count in (1..menuLinksCount) %}
   {% assign groupTitle = "group_title_" %}
-  {% assign groups = "groups_" %}
+  {% assign desktopGroups = "groups_" %}
   {% case count %}
     {% when 1 %}
       {% assign groupTitle = groupTitle | append: "one" %}
-      {% assign groups = groups | append: "one" %}
+      {% assign desktopGroups = desktopGroups | append: "one" %}
     {% when 2 %}
       {% assign groupTitle = groupTitle | append: "two" %}
-      {% assign groups = groups | append: "two" %}
+      {% assign desktopGroups = desktopGroups | append: "two" %}
     {% when 3 %}
       {% assign groupTitle = groupTitle | append: "three" %}
-      {% assign groups = groups | append: "three" %}
+      {% assign desktopGroups = desktopGroups | append: "three" %}
     {% when 4 %}
       {% assign groupTitle = groupTitle | append: "four" %}
-      {% assign groups = groups | append: "four" %}
+      {% assign desktopGroups = desktopGroups | append: "four" %}
   {% endcase %}
 
   <nav class="col-2" aria-label="{{ menuGrp[groupTitle] }}">
@@ -29,7 +29,7 @@
       </h2>
 
       <ul class="d-flex flex-column row-gap-150 align-items-start list-unstyled m-0 p-0">
-        {% for subGrp in menuGrp[groups] %}
+        {% for subGrp in menuGrp[desktopGroups] %}
           <li>
             <a href="{{ subGrp.url }}" class="menu-item ">
               {{ subGrp.name }}

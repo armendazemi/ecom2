@@ -4,7 +4,7 @@
     <div class="row">
       <div class="col-12">
         <div class="d-flex">
-          <a href="/{{ locale }}" class="nav-logo d-block">
+          <a href="/{% if locale != "sv" %}{{ locale }}{% endif %}" class="nav-logo d-block">
             <img src="{{ 'logo-black.svg' | asset_path }}" alt="{{ site.name }}" height="42" width="128">
           </a>
         </div>
@@ -38,13 +38,20 @@
 
     <div class="row row-gap-400">
       <div class="divider"></div>
-      <div class="col-12">
-        <accordion-group class="d-flex align-items-center gap-150">
+      {% if site.locales.size > 1 or store.currencies.size > 1 %}
+        <div class="col-12">
+          <accordion-group class="d-flex align-items-center gap-150">
 
-          {% include 'locale_changer' %}
-          {% include 'currency_changer' %}
-        </accordion-group>
-      </div>
+            {% if site.locales.size > 1 %}
+              {% include 'locale_changer' %}
+            {% endif %}
+
+            {% if store.currencies.size > 1 %}
+              {% include 'currency_changer' %}
+            {% endif %}
+          </accordion-group>
+        </div>
+      {% endif %}
 
       <div class="col-12">
         <div class="row flex-column flex-lg-row align-items-center gap-300">

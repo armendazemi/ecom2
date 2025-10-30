@@ -20,14 +20,14 @@
   <a class="d-flex flex-column row-gap-200 text-decoration-none" href="{{ prod.url }}"
      aria-label="{{ "Gå till product" | t }} {{ prod.name }}">
     <div class="product-card-flip__image-wrapper position-relative">
-      <img class="object-fit-contain aspect-1 product-card-flip__image-front" src="{{ prod.first_image.medium }}" alt=""
+      <img class="object-fit-cover aspect-1 product-card-flip__image-front" src="{{ prod.first_image.medium }}" alt=""
            height="416"
            width="416"
            decoding="async"
            loading="lazy">
 
       {% if prod.images[1].medium %}
-        <img class="object-fit-contain aspect-1 product-card-flip__image-back close" src=""
+        <img class="object-fit-cover aspect-1 product-card-flip__image-back close" src=""
              height="416"
              width="416"
              data-src="{{ prod.images[1].medium }}" alt=""

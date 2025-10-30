@@ -32,7 +32,7 @@
         <div class="divider"></div>
       </div>
       <div class="col-lg-4 padding-right-lg-600  padding-top-400 padding-top-lg-600 border-top-1-lg--soft">
-        <ul class="profile-navigation list-unstyled d-flex flex-column row-gap-100">
+        <ul class="profile-navigation list-unstyled d-flex flex-lg-column gap-100">
           <li role="presentation">
             <button type="button" class="category-button active"
                     data-pane-target="order-history">{{ "Orderhistorik" | t }}</button>
@@ -51,8 +51,12 @@
             <div class="d-flex flex-column row-gap-100">
 
               <h2 class="display-xs">{{ "Orderhistorik" | t }}</h2>
-              {% if customer.orders.size > 1 %}
-                <p class="text-secondary">{{ "Se dina senaste ordrar." | t }}</p>
+              <accordion-group class="d-flex flex-column row-gap-300">
+                {% if customer.orders.size > 0 %}
+                {% for order in customer.orders %}
+                  {% include 'order_accordion' %}
+                {% endfor %}
+              </accordion-group>
               {% else %}
               <p class="text-secondary">{{ "Du har inga ordrar ännu." | t }}</p>
             </div>

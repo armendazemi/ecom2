@@ -1,6 +1,7 @@
 {% assign title = "Sökresultat" %}
 {% include 'header' %}
 {% assign filter_max_price = products.max_price %}
+
 <section
   class="grp-heading padding-top-600 padding-top-lg-1200 padding-bottom-400 padding-bottom-lg-600 overflow-hidden">
   <div class="container">
@@ -84,7 +85,7 @@
       </div>
     </div>
     <div class="row margin-top-150">
-      <div class="col-12 active-group-filters flex-wrap align-items-center gap-150 d-none">
+      <div class="col-12 active-group-filters flex-wrap align-items-center gap-150">
         <a href="{{ request.path }}" class="neutral-button-secondary fw-regular w-fit-content">
           {{ "Rensa alla filter" | t }}
         </a>
@@ -125,11 +126,11 @@
       id="group-filter-form"
       action="{{ request.path }}?"
       method="get">
-      {% for type in group.option_types %}
-        <accordion-component>
+      {% for type in products.option_types %}
+        <accordion-component class="d-block margin-x-300 border-bottom-1--soft">
           <button type="button"
-                  class="clear-button fw-regular padding-y-300 justify-content-between w-100 h-auto">
-            {{ type.name }}
+                  class="clear-button fw-regular padding-y-300 justify-content-between w-100 h-auto padding-x-0">
+            {{ type.presentation }}
             <svg class="rotate" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
                  fill="none">
               <path
@@ -140,12 +141,12 @@
           <div class="dropdown">
             <div class="d-flex flex-column row-gap-100 padding-bottom-300 filter-details__values">
               {% for value in type.values %}
-                <label class="d-flex gap-base">
+                <label class="d-flex gap-125 text-md mb-0 align-items-center">
                   <input
                     class="checkbox-default checkbox--brand-primary"
                     type="checkbox"
-                    name="filter[{{ type.name }}][]"
-                    value="{{ value.name }}"/>
+                    name="groups[brands][]"
+                    value="{{ value.id }}"/>
                   <span>{{ value.presentation }}</span>
                 </label>
               {% endfor %}
@@ -228,101 +229,147 @@
 
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  // ----------------------------------------------
+  //  Filter handling
+  //  ----------------------------------------------
 
-    const select = document.getElementById('sort-by');
+  // Get all url parameters
+  const urlParams = new URLSearchParams(window.location.search);
 
-    // Preselect current value from URL
-    const params = new URLSearchParams(window.location.search);
-    if (params.has('Sort')) {
-      select.value = params.get('Sort');
+  // Find radio and checkboxes and set them to checked if they are in the url
+  // There can be multiple values for the same key in the url
+  const radios = document.querySelectorAll('input[type="radio"]');
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const checkedItems = [];
+  radios.forEach(radio => {
+    if (urlParams.has(radio.name)) {
+      if (urlParams.get(radio.name) === radio.value) {
+        radio.checked = true;
+        checkedItems.push(radio);
+      }
     }
+  });
 
-    // Update query params on change
-    select.addEventListener('change', () => {
-      const p = new URLSearchParams(window.location.search);
-      p.set('Sort', select.value);
-      window.location.search = p.toString(); // reload with new params
+  checkboxes.forEach(checkbox => {
+    if (urlParams.has(checkbox.name)) {
+      if (urlParams.getAll(checkbox.name).includes(checkbox.value)) {
+        checkbox.checked = true;
+        checkedItems.push(checkbox);
+      }
+    }
+  });
+
+  // Add filters to filter-active-options div from checked checkboxes and radios
+  // Get the label text of the checked checkboxes and radios and add them to the active filters div
+  const activeFilters = document.querySelector('.active-group-filters');
+
+  if (checkedItems.length > 0) {
+    checkedItems.forEach(input => {
+      let filterName = input.name.replace(/^(?:filter|groups)\[([^\]]+)\](?:\[\])?$/g, '$1').replace(/^./, match => match.toUpperCase());
+
+      filterName = filterName === 'Varumarken' ? 'Varumärken' : filterName;
+      const label = input.parentElement.querySelector('span').textContent;
+      const value = input.value;
+
+      const filter = document.createElement('button');
+      filter.classList.add('filter-chip', 'clear-filter-button');
+      filter.dataset.value = value;
+
+      if (filterName === 'Sort') {
+        let filterName = window.getTranslation('Sortera');
+        filter.textContent = filterName + ': ' + label;
+        filter.dataset.type = 'Sort';
+      } else if (filterName === 'Only_in_stock') {
+        filter.textContent = window.getTranslation('Endast i lager');
+        filter.dataset.type = 'only_in_stock';
+      } else {
+        filter.textContent = filterName + ': ' + label;
+        filter.dataset.type = input.name;
+      }
+
+      filter.innerHTML +=
+        `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M6.06253 14.7115L5.28857 13.9375L9.22607 10L5.28857 6.06253L6.06253 5.28857L10 9.22607L13.9375 5.28857L14.7115 6.06253L10.774 10L14.7115 13.9375L13.9375 14.7115L10 10.774L6.06253 14.7115Z" fill="#030712"/>
+      </svg>`;
+      activeFilters.insertBefore(filter, activeFilters.firstChild);
     });
+    activeFilters.style.display = 'flex';
+  } else {
+    activeFilters.style.display = 'none';
+  }
 
-    // Get all url parameters
+  const rangeSlider = document.querySelector('#filter-modal range-slider');
+  // If there is a price range in the url, set the range slider to that range
+  if (urlParams.has('Price[min]') && urlParams.has('Price[max]')) {
+    rangeSlider.setAttribute('start', urlParams.get('Price[min]'));
+    rangeSlider.setAttribute('end', urlParams.get('Price[max]'));
+  }
+
+  // Add the price range to active filters, if the values are not the default values
+  if (rangeSlider &&
+    rangeSlider.hasAttribute('start') && rangeSlider.hasAttribute('end') &&
+    (rangeSlider.getAttribute('end') !== rangeSlider.getAttribute('max') ||
+      rangeSlider.getAttribute('start') !== rangeSlider.getAttribute('min'))) {
+    const priceFilter = document.createElement('button');
+    priceFilter.dataset.type = 'Price';
+
+    priceFilter.classList.add('filter-chip', 'clear-filter-button');
+    priceFilter.textContent = `${window.getTranslation('Pris')}: ${rangeSlider.getAttribute('start')}${window.currencySymbol} - ${rangeSlider.getAttribute('end')}${window.currencySymbol}`;
+
+    priceFilter.innerHTML +=
+      `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M6.06253 14.7115L5.28857 13.9375L9.22607 10L5.28857 6.06253L6.06253 5.28857L10 9.22607L13.9375 5.28857L14.7115 6.06253L10.774 10L14.7115 13.9375L13.9375 14.7115L10 10.774L6.06253 14.7115Z" fill="#030712"/>
+      </svg>`;
+    activeFilters.insertBefore(priceFilter, activeFilters.firstChild);
+
+    activeFilters.style.display = 'flex';
+  }
+
+  // Clear the form
+  document.getElementById('clearFormBtn').addEventListener('click', () => {
+    // Remove all the params and just plain url
+    window.location.href = window.location.pathname;
+  });
+
+  // Clear filter button handling
+  window.addEventListener('click', handleFilterClear);
+  window.addEventListener('keydown', handleFilterClear);
+
+  function handleFilterClear (e) {
+    const isClick = e.type === 'click';
+    const isKeyboard =
+      e.type === 'keydown' && (e.key === 'Enter' || e.key === ' ');
+
+    if (!isClick && !isKeyboard) return;
+
+    const target = e.target.closest('.clear-filter-button');
+    if (!target) return;
+
+    // Prevent page scroll on space
+    if (isKeyboard) e.preventDefault();
+
+    const type = target.dataset.type;
+    const value = target.dataset.value || 0;
     const urlParams = new URLSearchParams(window.location.search);
 
-    // Find radio and checkboxes and set them to checked if they are in the url
-    // There can be multiple values for the same key in the url
-    const radios = document.querySelectorAll('input[type="radio"]');
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    const checkedItems = [];
-    radios.forEach(radio => {
-      if (urlParams.has(radio.name)) {
-        if (urlParams.get(radio.name) === radio.value) {
-          radio.checked = true;
-          checkedItems.push(radio);
-        }
-      }
-    });
-
-    checkboxes.forEach(checkbox => {
-      if (urlParams.has(checkbox.name)) {
-        if (urlParams.getAll(checkbox.name).includes(checkbox.value)) {
-          checkbox.checked = true;
-          checkedItems.push(checkbox);
-        }
-      }
-    });
-
-    // Add filters to filter-active-options div from checked checkboxes and radios
-    // Get the label text of the checked checkboxes and radios and add them to the active filters div
-    const activeFilters = document.querySelector('.active-group-filters');
-
-    if (checkedItems.length > 0 && activeFilters) {
-      checkedItems.forEach(input => {
-        const label = input.parentElement.querySelector('span').textContent;
-        const filter = document.createElement('span');
-        filter.classList.add('filter-chip');
-        filter.textContent = label;
-        activeFilters.insertBefore(filter, activeFilters.firstChild);
-      });
-    }
-
-    const rangeSlider = document.querySelector('range-slider');
-    // If there is a price range in the url, set the range slider to that range
-    if (urlParams.has('Price[min]') && urlParams.has('Price[max]')) {
-      rangeSlider.setAttribute('start', urlParams.get('Price[min]'));
-      rangeSlider.setAttribute('end', urlParams.get('Price[max]'));
-    }
-
-    // Add the price range to active filters, if the values are not the default values
-    if (rangeSlider.hasAttribute('start') && rangeSlider.hasAttribute('end') &&
-      (rangeSlider.getAttribute('end') !== rangeSlider.getAttribute('max') ||
-        rangeSlider.getAttribute('start') !== rangeSlider.getAttribute('min'))) {
-      const priceFilter = document.createElement('span');
-      priceFilter.classList.add('filter-chip');
-      priceFilter.textContent = `${window.getTranslation('Pris')}: ${window.ecomUtils.priceFormatter(rangeSlider.getAttribute('start'))} - ${window.ecomUtils.priceFormatter(rangeSlider.getAttribute('end'))} `;
-      activeFilters.insertBefore(priceFilter, activeFilters.firstChild);
-    }
-
-    const activeFilterCount = document.querySelector('.filter-count');
-    if (activeFilterCount) {
-      const count = activeFilters.querySelectorAll('.filter-chip').length;
-      activeFilterCount.textContent = `(${count})`;
-    }
-
-    if (activeFilters && activeFilters.querySelectorAll('.filter-chip').length > 0) {
-      activeFilters.classList.remove('d-none');
-      activeFilters.classList.add('d-flex');
+    if (type === 'Price') {
+      // Remove both price parameters
+      urlParams.delete('Price[min]');
+      urlParams.delete('Price[max]');
     } else {
-      activeFilters.classList.remove('d-flex');
-      activeFilters.classList.add('d-none');
+      const values = urlParams.getAll(type);
+      const newValues = values.filter(val => val !== value);
+      urlParams.delete(type);
+      newValues.forEach(val => urlParams.append(type, val));
     }
 
-    // Clear the form
-    document.getElementById('clearFormBtn').addEventListener('click', () => {
-      // Remove all the params and just plain url
-      window.location.href = window.location.pathname;
-    });
+    window.location.search = urlParams.toString();
+  }
 
-  });
+  // Update filter count in filter button
+  const filterButton = document.querySelector('button[data-modal-element="#filter-modal"]');
+  const filterCountSpan = filterButton.querySelector('.filter-count');
+  const activeFilterButtons = document.querySelectorAll('.active-group-filters .filter-chip');
+  filterCountSpan.textContent = `(${activeFilterButtons.length})`;
 </script>
-
 {% include 'footer' %}
