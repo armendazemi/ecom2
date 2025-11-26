@@ -6,10 +6,6 @@
 // Primitive Color Variables
 // --------------------------
 
-// Fixes CLS issues with stacking swiper-slides prior to JS init
-.swiper-wrapper
-  display: flex
-
 // Neutral Colors
 $neutral-1000: #030712
 $neutral-800: #1E2939
@@ -579,6 +575,7 @@ button
   @extend %button-base
   background-color: transparent
   padding: 0
+  color: $text-primary
 
   &:hover,
   &:focus-visible
@@ -1586,10 +1583,18 @@ select
   background-repeat: no-repeat
   background-position: right $space-150 top 50%
   cursor: pointer
+  color: $text-primary
+  background-color: white
 
 // ----
 // HEADER
 // ----
+.nav-logo
+  width: 128px
+
+  img
+    object-fit: contain
+
 .menu-dropdown
   width: 100%
   left: 0

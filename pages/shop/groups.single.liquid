@@ -41,8 +41,8 @@
       </div>
 
       <div class="col-12">
-        <swiper-slider slides="auto" spaceBetween="12">
-          <div class="swiper swiper-container d-flex justify-content-center w-fit-content">
+        <swiper-slider slides="auto" spaceBetween="12" class="subgroups-slider">
+          <div class="swiper swiper-container d-flex justify-content-center">
             <div class="swiper-wrapper">
               {% for subGrp in group.children %}
                 <div class="swiper-slide w-fit-content">
@@ -148,5 +148,14 @@
 </section>
 
 {% include 'filter_modal' %}
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Bug on MacOs not being able to drag the slider without resizing the viewport.
+    const swiperSlider = document.querySelector('.subgroups-slider');
+    swiperSlider.swiper.update();
+  });
+</script>
 
 {% include 'footer' %}
