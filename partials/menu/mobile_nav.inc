@@ -100,12 +100,28 @@
     </div>
 
     <div class="fixed-bottom padding-y-300 padding-x-150 bg-white">
-      <button type="button"
-              class="brand-button-secondary w-100"
-              data-modal-element="#main-menu"
-              data-modal-action="close"
-              aria-label="{{ "Stäng menyn" | t }}"
-      >{{ "Stäng" | t }}</button>
+      <button type="button" class="brand-button-secondary w-100" id="close-menu-button"
+              aria-label="{{ "Stäng menyn" | t }}">{{ "Stäng" | t }}</button>
     </div>
   </modal-component>
 </top-element>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const closeMenuButton = document.getElementById('close-menu-button');
+    const toggleButton = document.querySelector('toggle-button').querySelector('button');
+    closeMenuButton.addEventListener('click', () => {
+      window.dispatchEvent(
+        new CustomEvent('modalchange', {
+          detail: {
+            action: 'close',
+            element: '#main-menu',
+            withOverlay: true,
+            lockBodyScroll: true,
+            initiator: toggleButton
+          },
+        })
+      );
+    });
+  });
+</script>

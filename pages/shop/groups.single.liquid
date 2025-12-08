@@ -2,15 +2,31 @@
 {% include 'shop_breadcrumbs' %}
 {% assign filter_max_price = group.subtree_products_max_price | round %}
 
+{% assign productListView = request.cookies["productListView"] | fallback: "grid" %}
 
-{% if request.params["only_in_stock"] == "true" %}
-  {% assign product_selection = group.subtree_products.only_in_stock.filter.limit.12.paginate %}
-  {% assign total_products = group.subtree_products.only_in_stock.filter.all.size %}
 
+
+{% if productListView == "grid" %}
+  {% if request.params["only_in_stock"] == "true" %}
+    {% assign product_selection = group.subtree_products.only_in_stock.filter.limit.20.paginate %}
+    {% assign total_products = group.subtree_products.only_in_stock.filter.all.size %}
+
+  {% else %}
+
+    {% assign product_selection = group.subtree_products.filter.limit.20.paginate %}
+    {% assign total_products = group.subtree_products.filter.all.size %}
+  {% endif %}
 {% else %}
 
-  {% assign product_selection = group.subtree_products.filter.limit.12.paginate %}
-  {% assign total_products = group.subtree_products.filter.all.size %}
+  {% if request.params["only_in_stock"] == "true" %}
+    {% assign product_selection = group.subtree_products.only_in_stock.filter.limit.12.paginate %}
+    {% assign total_products = group.subtree_products.only_in_stock.filter.all.size %}
+
+  {% else %}
+
+    {% assign product_selection = group.subtree_products.filter.limit.12.paginate %}
+    {% assign total_products = group.subtree_products.filter.all.size %}
+  {% endif %}
 {% endif %}
 
 {% assign heroImage = false %}
@@ -26,6 +42,7 @@
          class="w-100 h-100 object-fit-cover object-position-center" loading="eager" fetchpriority="high"/>
   </section>
 {% endif %}
+
 
 <section
   class="grp-heading padding-top-600 padding-top-lg-1200 padding-bottom-400 padding-bottom-lg-600 overflow-hidden">
@@ -62,6 +79,33 @@
 <section>
   <div class="container">
     <div class="row row-gap-150 flex-wrap">
+      <div class="col-12">
+        <div class="row row-gap-150 justify-content-end">
+          <div class="col-auto">
+            <button type="button"
+                    class="neutral-button-primary" {% if productListView == "grid" %}aria-disabled="true" disabled{% endif %}
+                    data-list-layout="grid">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                   fill="#000000">
+                <path
+                  d="M120-200v-560q0-33 23.5-56.5T200-840h560q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H200q-33 0-56.5-23.5T120-200Zm400-240v240h240v-240H520Zm0-80h240v-240H520v240Zm-80 0v-240H200v240h240Zm0 80H200v240h240v-240Z"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="col-auto">
+            <button type="button" class="neutral-button-primary" {% if productListView == "list" %} aria-disabled="true" disabled {% endif %}
+                    data-list-layout="list">
+              <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"
+                   fill="#000000">
+                <path
+                  d="M320-600q-17 0-28.5-11.5T280-640q0-17 11.5-28.5T320-680h480q17 0 28.5 11.5T840-640q0 17-11.5 28.5T800-600H320Zm0 160q-17 0-28.5-11.5T280-480q0-17 11.5-28.5T320-520h480q17 0 28.5 11.5T840-480q0 17-11.5 28.5T800-440H320Zm0 160q-17 0-28.5-11.5T280-320q0-17 11.5-28.5T320-360h480q17 0 28.5 11.5T840-320q0 17-11.5 28.5T800-280H320ZM160-600q-17 0-28.5-11.5T120-640q0-17 11.5-28.5T160-680q17 0 28.5 11.5T200-640q0 17-11.5 28.5T160-600Zm0 160q-17 0-28.5-11.5T120-480q0-17 11.5-28.5T160-520q17 0 28.5 11.5T200-480q0 17-11.5 28.5T160-440Zm0 160q-17 0-28.5-11.5T120-320q0-17 11.5-28.5T160-360q17 0 28.5 11.5T200-320q0 17-11.5 28.5T160-280Z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div class="col-6 col-lg d-flex flex-row align-items-lg-center gap-150">
         <button type="button" class="neutral-button-secondary fw-regular"
                 data-modal-action="open"
@@ -140,10 +184,10 @@
 
 <section class="products-section padding-top-400 padding-top-lg-600 padding-bottom-600">
   <div class="container">
-    <div class="row row-gap-300 row-gap-lg-400">
+    <ul class="row row-gap-300 row-gap-lg-400 list-unstyled padding-0 margin-y-0">
 
       {% include 'products_paginated' %}
-    </div>
+    </ul>
   </div>
 </section>
 
@@ -155,7 +199,22 @@
     // Bug on MacOs not being able to drag the slider without resizing the viewport.
     const swiperSlider = document.querySelector('.subgroups-slider');
     swiperSlider.swiper.update();
+
+    setupListViewHandling();
   });
+
+  function setupListViewHandling () {
+    const listViewButtons = document.querySelectorAll('button[data-list-layout]');
+
+    listViewButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const listLayout = button.getAttribute('data-list-layout');
+        // Set cookie
+        document.cookie = `productListView=${listLayout}; expires=${new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toUTCString()} path=/`;
+        window.location.reload();
+      });
+    });
+  }
 </script>
 
 {% include 'footer' %}

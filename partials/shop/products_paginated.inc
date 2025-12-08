@@ -1,7 +1,13 @@
 {% for prod in product_selection %}
-  <div class="col-md-6 col-xl-4">
-    {% include 'product_card_hover_flip' %}
-  </div>
+  {% if productListView == "list" %}
+    <li class="col-md-6 col-xl-3">
+      {% include 'product_list_card' %}
+    </li>
+  {% else %}
+    <li class="col-md-6 col-xl-3">
+      {% include 'product_card_hover_flip' %}
+    </li>
+  {% endif %}
 {% endfor %}
 
 {% assign next_paginate_url = 'next' | paginate_url %}
