@@ -13,6 +13,19 @@
   <meta property="og:description" content="{{ page.og_description }}"/>
   <meta property="og:image" content="{{ page.og_image }}"/>
 
+  {% assign is_no_duplicate = false %}
+
+  {% if locale == site.default_locale %}
+    {% if request.path == '/sv' or request.path == '/sv/' %}
+      {% assign is_no_duplicate = true %}
+    {% endif %}
+  {% endif %}
+
+  {% comment %} --- NOINDEX handling. --- {% endcomment %}
+  {% if is_no_duplicate %}
+    <meta name="robots" content="noindex,follow">
+  {% endif %}
+
   {% if locale == "sv" %}
     <link href="{{ request.base_url }}{{ request.path }}" rel="canonical">
   {% else %}
@@ -56,6 +69,7 @@
     rel="stylesheet">
 
   <!--- Styles --->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
@@ -67,6 +81,9 @@
   <script src="{{ 'cart_tracker.js' | template_path }}?{{ version }}" defer></script>
   <script src="{{ 'common.js' | template_path }}?{{ version }}" defer></script>
   <script src="{{ 'locale_changer.component.js' | template_path }}?{{ version }}" async></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  {% assign invoiceName = "Faktura" %}
 
 
   <script>
@@ -84,9 +101,25 @@
 
     window.hasRecaptcha = {{ site.has_recaptcha_enabled }};
     window.recaptcha_public_key = "{{ site.recaptcha_public_key }}";
+    const currency = window.shopCurrency;
+    const uiLocale = window.locale;
+
+    const currencyLocaleMap = {
+      SEK: 'sv-SE',
+      DKK: 'da-DK',
+      NOK: 'nb-NO',
+      EUR: 'de-DE'
+    };
+
     window.ecomConfig = {
-      priceCurrency: "{% if locale == "sv" %}SEK{% else %}EUR{% endif %}",
-      priceLocale: "{% if locale == "sv" %}sv-SE{% else %}de-DE{% endif %}",
+      priceCurrency: currency,
+      priceLocale: currencyLocaleMap[currency] || (
+        uiLocale === 'sv' ? 'sv-SE' :
+          uiLocale === 'da' ? 'da-DK' :
+            uiLocale === 'no' ? 'nb-NO' :
+              uiLocale === 'fi' ? 'fi-FI' :
+                'en-GB'
+      ),
       priceMinDecimalDigits: 0,
       priceMaxDecimalDigits: 2
     };

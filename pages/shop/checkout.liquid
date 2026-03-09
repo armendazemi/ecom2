@@ -7,18 +7,27 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-8">
-        <h1 class="display-md text-center">{{ "Checkout" | t }}</h1>
+        {% if cart.state == "confirm" %}
+          <h1 class="display-md text-center">{{ "Kontrollera uppgifter" | t }}</h1>
+        {% else %}
+          <h1 class="display-md text-center">{{ "Faktura" | t }}</h1>
+        {% endif %}
       </div>
 
     </div>
   </div>
 </section>
 
+
 <section class="padding-y-600 padding-y-lg-1200">
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-lg-8">
-        {{ snippet }}
+        {% if store.payment_method.name == invoiceName %}
+          {% include 'invoice_form' %}
+        {% else %}
+          {{ snippet }}
+        {% endif %}
       </div>
     </div>
   </div>

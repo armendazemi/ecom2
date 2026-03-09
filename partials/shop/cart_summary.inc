@@ -59,6 +59,10 @@
   </div>
 
   <div class="order-summary__cta margin-top-300">
-    <a href="{{ cart.checkout_url }}" class="brand-button-primary">{{ "Checkout" | t }}</a>
+    {% if store.payment_method.name == invoiceName %}
+      <a href="/w/checkout/adresses" class="brand-button-primary">{{ "Faktura" | t }}</a>
+    {% else %}
+      <a href="{{ cart.checkout_url }}" class="brand-button-primary">{{ "Checkout" | t }}</a>
+    {% endif %}
   </div>
 </div>
