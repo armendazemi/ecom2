@@ -1,13 +1,6 @@
-// Fixes CLS issues with stacking swiper-slides prior to JS init
 .swiper-wrapper
   display: flex
-
-  .swiper-slide
-    display: none
-    flex-shrink: 0
-
-    &:first-of-type
-      display: block
+  padding: 3px
 
 //--------------------------
 // Primitive Color Variables
@@ -533,6 +526,9 @@ button
     color: $text-disabled
     cursor: not-allowed
 
+    svg
+      fill: $text-disabled
+
 .neutral-button-primary--dark
   @extend %button-base
   background-color: $background-brand-subtle-alpha
@@ -582,6 +578,7 @@ button
   @extend %button-base
   background-color: transparent
   padding: 0
+  color: $text-primary
 
   &:hover,
   &:focus-visible
@@ -1107,7 +1104,7 @@ modal-component
 
 #main-menu
   width: 100%
-  height: calc(100dvh - $header-height)
+  height: calc(100dvh - $header-height - 92px)
   background-color: $neutral-0
   overflow: auto
 
@@ -1191,6 +1188,9 @@ modal-component
     top: var(--header-height)
     opacity: 1
 
+range-slider
+  label
+    flex-grow: 1
 
 accordion-component,
 progress-accordion
@@ -1318,7 +1318,9 @@ variant-quantity[disabled]
     button
       cursor: not-allowed
 
-
+// --------------------------
+// KEYFRAMES / ANIMATIONS
+// --------------------------
 .form-status-pending
   button[type=submit]
     position: relative
@@ -1333,12 +1335,39 @@ variant-quantity[disabled]
       border-radius: 50%
       animation: spin 1s linear infinite
 
+
+.form-animate-loading.form-status-pending,
+.animate-loading
+  position: relative
+  overflow: hidden
+  opacity: .7
+  pointer-events: none
+
+  &::before
+    content: ""
+    position: absolute
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.9), transparent)
+    width: 50%
+    height: 100%
+    top: 0
+    left: 0
+    animation: loading 1s infinite
+
+
 @keyframes spin
   to
     transform: rotate(360deg)
 
   from
     transform: rotate(0deg)
+
+
+@keyframes loading
+  0%
+    transform: skewX(-10deg) translateX(-100%)
+
+  100%
+    transform: skewX(-10deg) translateX(200%)
 
 // --------------------------
 // LINKS TABS & BREADCRUMBS$
@@ -1519,7 +1548,29 @@ input[type="search"]::-webkit-search-results-decoration
 
 
 input[type=checkbox]
-  @extend %check-radio-base
+  position: relative
+  appearance: none
+  border-radius: 0 !important
+  height: 20px
+  width: 20px
+  border: 1px solid $border-bold
+
+  &:hover
+    background-color: $background-neutral-hover
+
+  &:checked
+    background-color: $foreground-primary
+
+    &::before
+      content: ''
+      position: absolute
+      top: 50%
+      left: 50%
+      transform: translate(-50%, -50%)
+      width: 12px
+      height: 9px
+      background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="9" viewBox="0 0 12 9" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M11.0404 0.292893C11.431 0.683417 11.431 1.31658 11.0404 1.70711L4.62377 8.12377C4.43624 8.31131 4.18188 8.41667 3.91667 8.41667C3.65145 8.41667 3.3971 8.31131 3.20956 8.12377L0.292893 5.20711C-0.0976311 4.81658 -0.0976311 4.18342 0.292893 3.79289C0.683418 3.40237 1.31658 3.40237 1.70711 3.79289L3.91667 6.00245L9.62623 0.292893C10.0168 -0.0976311 10.6499 -0.0976311 11.0404 0.292893Z" fill="white"/></svg>') no-repeat center center
+      background-size: contain
 
 
 input[type=radio]
@@ -1535,10 +1586,18 @@ select
   background-repeat: no-repeat
   background-position: right $space-150 top 50%
   cursor: pointer
+  color: $text-primary
+  background-color: white
 
 // ----
 // HEADER
 // ----
+.nav-logo
+  width: 128px
+
+  img
+    object-fit: contain
+
 .menu-dropdown
   width: 100%
   left: 0
@@ -1589,6 +1648,15 @@ select
   min-height: 600px
   @media (min-width: 992px)
     min-height: 720px
+
+.grp-hero-image
+  height: 211px
+  @media (min-width: 768px)
+    height: 288px
+  @media (min-width: 992px)
+    height: 350px
+  @media (min-width: 1200px)
+    height: 400px
 
 
 // --------------------------

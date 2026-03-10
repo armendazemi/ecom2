@@ -7,7 +7,8 @@
   <div class="container position-relative">
     <div class="row margin-bottom-300">
       <div class="col-lg-7">
-        <h1 class="display-md">{{ "Varukorg" | t }} ({{ cart.unit_quantity }})</h1>
+        <h1 class="display-md">{{ "Varukorg" | t }} (<span id="checkout-product-count">{{ cart.unit_quantity }}</span>)
+        </h1>
       </div>
     </div>
 
@@ -25,6 +26,19 @@
       <div class="col-lg-5 padding-left-lg-300 position-sticky top--header-height">
         {% include 'cart_summary' %}
       </div>
+
+      {% else %}
+
+        <div class="row">
+          <div class="col-12 section-padding-large">
+            <div class="d-flex flex-column row-gap-200 align-items-center text-center section-padding-large">
+              <h2>{{ "Din varukorg är tom" | t }}</h2>
+              <p class="text-secondary">{{ "Hitta något du gillar och lägg till det i din varukorg" | t }}</p>
+              <a href="{% if locale != "sv" %}/{{ locale }}{% endif %}/catalog/groups/sortiment"
+                 class="brand-button-primary">{{ "Utforska sortiment" | t }}</a>
+            </div>
+          </div>
+        </div>
       {% endif %}
     </div>
   </div>
@@ -52,5 +66,21 @@
             data-modal-element="#campaignCodeErrorModal">{{ "Stäng" | t }}</button>
   </div>
 </modal-component>
+
+
+<script>
+  window.addEventListener('cart:update_order', () => {
+    const cartSummaryElement = document.querySelector('.cart-summary');
+    console.log('Cart update event received',);
+    cartSummaryElement.classList.add('animate-loading');
+  });
+
+  window.addEventListener('checkout:price-updated', () => {
+    console.log('checkoutprice updated');
+    const cartSummaryElement = document.querySelector('.cart-summary');
+    cartSummaryElement.classList.remove('animate-loading');
+  });
+
+</script>
 
 {% include 'footer' %}

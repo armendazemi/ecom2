@@ -62,6 +62,7 @@
     const imageCounterElement = document.querySelector('.product-gallery__image-counter');
     const imagesCount = productGalleryMain.querySelectorAll('img');
     const imageWidth = imagesCount[0].clientWidth;
+    const FAULT_TOLERANCE = 2;
 
     if (imagesCount.length <= 1) {
       return;
@@ -69,12 +70,17 @@
 
     function updateImageGalleryCounter (e) {
       const target = e.target;
-      const scrollLeft = target.scrollLeft;
+      const scrollLeft = Math.ceil(target.scrollLeft);
+      const currentIndex = Math.floor(scrollLeft / imageWidth);
 
-      const rest = scrollLeft % imageWidth;
+      if (scrollLeft === 0 && currentIndex === 0) {
+        imageCounterElement.textContent = '1';
+        return;
+      }
+      const rest = Math.abs((scrollLeft / currentIndex) - imageWidth);
+      console.log(rest);
 
-      if (rest === 0) {
-        const currentIndex = Math.floor(scrollLeft / imageWidth);
+      if (rest <= FAULT_TOLERANCE) {
         imageCounterElement.textContent = String(currentIndex + 1);
       }
     }
@@ -82,7 +88,6 @@
     const debouncedUpdateImageGalleryCounter = debouncer(updateImageGalleryCounter, 100);
     productGalleryMain.addEventListener('scroll', debouncedUpdateImageGalleryCounter);
     productGalleryMain.addEventListener('touchmove', debouncedUpdateImageGalleryCounter);
-
 
     function handleScrollButtons (direction) {
       const currentScroll = productGalleryMain.scrollLeft;

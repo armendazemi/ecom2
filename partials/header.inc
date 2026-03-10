@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
-  <title>{{ title | t | fallback: seo.title }} {%if request.params.page%} | {{"Sida"|t}} {{request.params.page}}{% endif %}</title>
+  <title>{{ title | t | fallback: seo.title }} {% if request.params.page %} | {{ "Sida" | t }} {{ request.params.page }}{% endif %}</title>
   <meta name="description" content="{{ seo.description | fallback: "Fokus, Sveriges största webbutik" | t }}">
   <meta name="keywords" content="{{ seo.keywords }}">
 
@@ -13,13 +13,35 @@
   <meta property="og:description" content="{{ page.og_description }}"/>
   <meta property="og:image" content="{{ page.og_image }}"/>
 
-  {% if locale == "sv" %}
-    <link href="https://ecom2.se{{ request.path }}{%if request.params.page%}?page={{request.params.page}}{% endif %}" rel="canonical">
-  {% elsif locale == "en" %}
-    <link href="https://ecom2.se/en{{ request.path }}{%if request.params.page%}?page={{request.params.page}}{% endif %}" rel="canonical">
+  {% assign is_no_duplicate = false %}
+
+  {% if locale == site.default_locale %}
+    {% if request.path == '/sv' or request.path == '/sv/' %}
+      {% assign is_no_duplicate = true %}
+    {% endif %}
   {% endif %}
-  <link rel="alternate" hreflang="sv" href="https://ecom2.se/"/>
-  <link rel="alternate" hreflang="en" href="https://ecom2.se/en"/>
+
+  {% comment %} --- NOINDEX handling. --- {% endcomment %}
+  {% if is_no_duplicate %}
+    <meta name="robots" content="noindex,follow">
+  {% endif %}
+
+  {% if locale == "sv" %}
+    <link href="{{ request.base_url }}{{ request.path }}" rel="canonical">
+  {% else %}
+    <link href="{{ request.base_url }}/{{ locale }}{{ request.path }}" rel="canonical">
+  {% endif %}
+
+  {% for locale in site.locales %}
+    {% if locale != site.default_locale %}
+      <link rel="alternate" hreflang="{{ locale }}"
+            href="{{ request.base_url }}/{{ locale }}{{ request.path }}{% if request.params.page %}?page={{ request.params.page }}{% endif %}"/>
+    {% endif %}
+  {% endfor %}
+
+  <link rel="alternate" hreflang="{{ site.default_locale }}"
+        href="{{ request.base_url }}{{ request.path }}{% if request.params.page %}?page={{ request.params.page }}{% endif %}"/>
+  <link rel="alternate" hreflang="x-default" href="{{ request.base_url }}/">
 
   <link rel="icon" href="{{ 'favicon.png' | asset_path }}">
 
@@ -29,12 +51,13 @@
 
   <link rel="alternate" type="application/rss+xml" href="/{{ locale }}/a.rss" title="RSS Feed">
   <!--- Preload the first hero mobile image to improve mobile performance --->
-  <link rel="preload" as="image" href="{{lists.hero-slider-start.rows[0].background_image_mobile}}" type="image/webp" fetchpriority="high">
+  <link rel="preload" as="image" href="{{ lists.hero-slider-start.rows[0].background_image_mobile }}" type="image/webp"
+        fetchpriority="high">
 
   {% assign version = "version=1.0" %}
 
   <!--- Preloads --->
-  <link rel="reload" as="image" href="{{lists.hero-slider-start.rows[0].background_image_mobile}}">
+  <link rel="reload" as="image" href="{{ lists.hero-slider-start.rows[0].background_image_mobile }}">
   <link rel="preload" as="style" href="{{ 'styles.css' | template_path }}?{{ version }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -46,6 +69,7 @@
     rel="stylesheet">
 
   <!--- Styles --->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
 
@@ -53,11 +77,13 @@
   <link href="{{ 'styles.css' | template_path }}?{{ version }}" rel="stylesheet">
 
 
-
   <!---- Scripts --->
-
+  <script src="{{ 'cart_tracker.js' | template_path }}?{{ version }}" defer></script>
   <script src="{{ 'common.js' | template_path }}?{{ version }}" defer></script>
   <script src="{{ 'locale_changer.component.js' | template_path }}?{{ version }}" async></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+  {% assign invoiceName = "Faktura" %}
 
 
   <script>
@@ -74,20 +100,37 @@
     };
 
     window.hasRecaptcha = {{ site.has_recaptcha_enabled }};
-    window.recaptcha_public_key = "{{site.recaptcha_public_key}}"
+    window.recaptcha_public_key = "{{ site.recaptcha_public_key }}";
+    const currency = window.shopCurrency;
+    const uiLocale = window.locale;
+
+    const currencyLocaleMap = {
+      SEK: 'sv-SE',
+      DKK: 'da-DK',
+      NOK: 'nb-NO',
+      EUR: 'de-DE'
+    };
+
     window.ecomConfig = {
-      priceCurrency: "{%if locale == "sv"%}SEK{%else%}EUR{%endif%}",
-      priceLocale: "{%if locale == "sv"%}sv-SE{%else%}de-DE{%endif%}",
+      priceCurrency: currency,
+      priceLocale: currencyLocaleMap[currency] || (
+        uiLocale === 'sv' ? 'sv-SE' :
+          uiLocale === 'da' ? 'da-DK' :
+            uiLocale === 'no' ? 'nb-NO' :
+              uiLocale === 'fi' ? 'fi-FI' :
+                'en-GB'
+      ),
       priceMinDecimalDigits: 0,
       priceMaxDecimalDigits: 2
-    }
+    };
 
   </script>
 
 
 </head>
 <body class="">
-<a href="#main-content" class="brand-button-primary w-fit-content" id="skip-link">{{ "Hoppa till huvudinnehåll" | t }}</a>
+<a href="#main-content" class="brand-button-primary w-fit-content"
+   id="skip-link">{{ "Hoppa till huvudinnehåll" | t }}</a>
 
 <header class="main-header">
   {% include 'top_bar' %}

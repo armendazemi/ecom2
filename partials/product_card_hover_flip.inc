@@ -1,4 +1,4 @@
-<article class="product-card-flip position-relative">
+<div class="product-card-flip position-relative">
   <div
     class="product-card-flip__badges position-absolute top-0 start-0 d-flex flex-column row-gap-50 justify-content-start z-2">
     {%-comment-%} If newer than 30 days, show new badge {%-endcomment-%}
@@ -20,17 +20,18 @@
   <a class="d-flex flex-column row-gap-200 text-decoration-none" href="{{ prod.url }}"
      aria-label="{{ "Gå till product" | t }} {{ prod.name }}">
     <div class="product-card-flip__image-wrapper position-relative">
-      <img class="object-fit-contain aspect-1 product-card-flip__image-front" src="{{ prod.first_image.medium }}" alt=""
+      <img class="object-fit-cover aspect-1 product-card-flip__image-front" src="{{ prod.first_image.medium }}"
+           alt="{{ prod.name }}"
            height="416"
            width="416"
            decoding="async"
            loading="lazy">
 
       {% if prod.images[1].medium %}
-        <img class="object-fit-contain aspect-1 product-card-flip__image-back close" src=""
+        <img class="object-fit-cover aspect-1 product-card-flip__image-back close" src=""
              height="416"
              width="416"
-             data-src="{{ prod.images[1].medium }}" alt=""
+             data-src="{{ prod.images[1].medium }}" alt="{{ prod.name }}"
              decoding="async"
              loading="lazy">
       {% endif %}
@@ -53,6 +54,6 @@
       </div>
     </div>
   </a>
-</article>
+</div>
 
 {% assign isVariant = false %} <!--- Reset --->

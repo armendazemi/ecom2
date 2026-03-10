@@ -2,7 +2,7 @@
 const formatter = window.ecomUtils.priceFormatter;
 
 // Create a new function that wraps the formatter
-const formatPrice = (number) => formatter(number) + 'kr';
+const formatPrice = (number) => formatter(number);
 
 document.addEventListener('DOMContentLoaded', () => {
   getAndStoreCartState();
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.clearCartState = clearCartState;
 
   window.addEventListener('cart:updated', () => {
-    updateCartPrice();
+    updateCheckoutPrice();
   });
 
   window.addEventListener('cart:update', (event) => {
@@ -113,37 +113,11 @@ function clearCartState () {
   sessionStorage.removeItem('cartState');
 }
 
-function updateCartPrice () {
-  const cartState = getCartState();
-  const sideCartTotalPriceElement = document.getElementById('side-cart__total-price');
-
-  if (!cartState || !sideCartTotalPriceElement) {
+function updateCheckoutPrice () {
+  if (!window.location.href.includes('/w/cart')) {
     return;
   }
-
-  const sideCartHasItemsElement = document.querySelector('.side-cart__subtotal--has-items');
-  const sideCartNoItemsElement = document.querySelector('.side-cart__subtotal--empty');
-  if (cartState.order_items.length === 0) {
-    sideCartHasItemsElement.classList.add('d-none');
-    sideCartNoItemsElement.classList.remove('d-none');
-  } else {
-    sideCartHasItemsElement.classList.remove('d-none');
-    sideCartNoItemsElement.classList.add('d-none');
-
-  }
-
-  const totalDiscountValue = Number(cartState.order.discount_total);
-  const cartTotal = window.showTaxes ? cartState.order.item_total : cartState.order.item_pre_tax_total;
-  const formattedPrice = formatPrice(cartTotal - totalDiscountValue);
-  sideCartTotalPriceElement.textContent = `${formattedPrice}`;
-
-  if (window.location.href.includes('checkout')) {
-    updateCheckoutPrice(cartState);
-    updateCheckoutItems(cartState);
-  }
-}
-
-function updateCheckoutPrice (cartState) {
+  const cartState = getCartState();
   const productCountElement = document.getElementById('checkout-product-count');
   const combinedArticlePriceElement = document.getElementById('combined-article-price');
   const discountPriceElement = document.getElementById('discount-price');
@@ -171,7 +145,7 @@ function updateCheckoutPrice (cartState) {
     orderItemsDiscount = originalCombinedArticlePrice - currentCombinedArticlePrice;
   }
 
-  productCountElement.textContent = productCount > 1 || productCount === 0 ? `${productCount} produkter` : `${productCount} produkt`;
+  productCountElement.innerHTML = String(productCount);
   combinedArticlePriceElement.textContent = formatPrice(originalCombinedArticlePrice);
   taxPriceElement.textContent = formatPrice(taxTotal);
   discountPriceElement.textContent = formatPrice(orderDiscount + orderItemsDiscount);
@@ -187,36 +161,6 @@ function updateCheckoutPrice (cartState) {
 
   const cartTotal = window.showTaxes ? cartState.order.total : cartState.order.pre_tax_total;
   totalPriceElement.textContent = formatPrice(cartTotal);
-}
 
-function updateCheckoutItems (cartState) {
-  const checkoutItemsElement = document.querySelectorAll('.checkout-wrapper__items .product-card-cart-preview');
-
-  if (!checkoutItemsElement) {
-    return;
-  }
-  cartState.order_items.forEach((item) => {
-    const variantId = item.variant_id;
-
-    const checkoutItem = Array.from(checkoutItemsElement).find((element) => {
-      return Number(element.getAttribute('data-variant-id')) === variantId;
-    });
-
-    if (!checkoutItem) {
-      return;
-    }
-
-    const checkoutItemPrice = checkoutItem.querySelector('.product-card-cart-preview__price');
-    // Check if the item has a discount by comparing the amount to the original amount
-
-    if (Number(item.original_amount) > Number(item.amount)) {
-      const discountPrice = checkoutItemPrice.querySelector('.product-card-cart-preview__price-discount');
-      const originalPrice = checkoutItemPrice.querySelector('.product-card-cart-preview__price-original');
-      originalPrice.textContent = window.showTaxes ? formatPrice(item.original_amount) : formatPrice(item.original_amount_pre_tax);
-      discountPrice.textContent = window.showTaxes ? formatPrice(item.amount) : formatPrice(item.pre_tax_amount);
-    } else {
-      const originalPrice = checkoutItemPrice.querySelector('.product-card-cart-preview__price-original');
-      originalPrice.textContent = window.showTaxes ? formatPrice(item.original_amount) : formatPrice(item.original_amount_pre_tax);
-    }
-  });
+  window.dispatchEvent(new CustomEvent('checkout:price-updated'));
 }

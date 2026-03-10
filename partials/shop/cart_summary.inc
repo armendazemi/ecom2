@@ -31,36 +31,38 @@
     <div class="order-summary__details d-flex flex-column row-gap-50 padding-bottom-200 border-bottom-1--soft">
       <div class="text-secondary d-flex justify-content-between text-secondary">
         <span>{{ "Delsumma" | t }}</span>
-        <span class="text-right">{{ cart.item_total | currency: 0 }}</span>
+        <span class="text-right" id="combined-article-price">{{ cart.item_total | currency: 0 }}</span>
       </div>
 
-      {% if cart.discount_total > 0 %}
-        <div class="text-secondary d-flex justify-content-between text-secondary">
-          <span>{{ "Rabatt" | t }}</span>
-          <span class="text-right text-campaign">-{{ cart.discount_total | currency: 0 }}</span>
-        </div>
-      {% endif %}
+      <div class="text-secondary d-flex justify-content-between text-secondary">
+        <span>{{ "Rabatt" | t }}</span>
+        <span class="text-right text-campaign" id="discount-price">-{{ cart.discount_total | currency: 0 }}</span>
+      </div>
 
       <div class="text-secondary d-flex justify-content-between text-secondary">
         <span>{{ "Frakt" | t }}</span>
-        <span class="text-right">{{ cart.shipment_total | currency: 0 }}</span>
+        <span class="text-right" id="shipping-price">{{ cart.shipment_total | currency: 0 }}</span>
       </div>
     </div>
 
     <div class="order-summary__total">
       <div class="text-secondary d-flex justify-content-between text-secondary">
         <span class="fw-semi">{{ "Totalt" | t }}</span>
-        <span class="text-right">{{ cart.total | currency: 0 }}</span>
+        <span class="text-right" id="total-price">{{ cart.total | currency: 0 }}</span>
       </div>
 
       <div class="text-secondary d-flex justify-content-between text-secondary">
         <span class="">{{ "Varav moms" | t }}</span>
-        <span class="text-right ">{{ cart.included_tax_total | currency: 0 }}</span>
+        <span class="text-right" id="tax-price">{{ cart.included_tax_total | currency: 0 }}</span>
       </div>
     </div>
   </div>
 
   <div class="order-summary__cta margin-top-300">
-    <a href="{{ cart.checkout_url }}" class="brand-button-primary">{{ "Checkout" | t }}</a>
+    {% if store.payment_method.name == invoiceName %}
+      <a href="/w/checkout/adresses" class="brand-button-primary">{{ "Faktura" | t }}</a>
+    {% else %}
+      <a href="{{ cart.checkout_url }}" class="brand-button-primary">{{ "Checkout" | t }}</a>
+    {% endif %}
   </div>
 </div>

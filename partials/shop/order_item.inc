@@ -36,11 +36,25 @@
     </div>
 
     <div class="order-item__footer d-flex column-gap-150">
-                  <span
-                    class="order-item__quantity text-sm text-secondary">{{ "Antal" | t }}: {{ item.quantity }}</span>
+      {% if lists.global-settings.rows[0].quantity_selector == "true" and displayOnly != true %}
+        {% assign stockItem = item.variant.stock %}
+        {% if stockItem.backorderable %}
+          {% assign maxStock = 999 %}
+        {% else %}
+          {% assign maxStock = stockItem.available_quantity %}
+        {% endif %}
 
-      <button type="button" class="brand-link remove-variant ms-auto"k
-              data-variant-id="{{ item.variant.id }}">{{ "Ta bort" | t }}</button>
+        {% assign variantId = item.variant_id %}
+
+        {% include 'quantity_selector' %}
+      {% else %}
+        <span class="order-item__quantity text-sm text-secondary">{{ "Antal" | t }}: {{ item.quantity }}</span>
+      {% endif %}
+
+      {% unless displayOnly %}
+        <button type="button" class="brand-link remove-variant ms-auto"
+                data-variant-id="{{ item.variant.id }}">{{ "Ta bort" | t }}</button>
+      {% endunless %}
     </div>
   </div>
 </article>

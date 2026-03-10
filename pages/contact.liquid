@@ -7,8 +7,8 @@
     <div class="row justify-content-center">
       <div class="col-lg-8">
         <div class="d-flex flex-column row-gap-200">
-          {{ 'contact-eyebrow' | page_editable: class: 'eyebrow display-subheading' }}
-          {{ 'contact-heading' | page_editable: class: 'display-xl-heading p-color-secondary' }}
+          {{ 'contact-eyebrow' | page_editable: class: 'eyebrow display-subheading text-center' }}
+          {{ 'contact-heading' | page_editable: class: 'display-xl-heading p-color-secondary text-center' }}
         </div>
       </div>
     </div>
@@ -19,7 +19,7 @@
         {% capture hasContent %}{{ editableName | has_page_editable }}{% endcapture %}
         {% if hasContent == 'true' %}
           <div class="col-12 col-lg">
-            {{ editableName | page_editable: class: "contact-square bg-brand-accent padding-400 padding-lg-600 display-sm-heading brand-links d-flex flex-column row-gap-200" }}
+            {{ editableName | page_editable: class: "contact-square bg-brand-accent padding-400 padding-lg-600 display-sm-heading brand-links d-flex flex-column row-gap-200 text-center" }}
           </div>
         {% endif %}
       {% endfor %}

@@ -1,13 +1,14 @@
-<swiper-slider slides="1" slidesDesktop="2.5">
-  <div class="swiper swiper-container custom-swiper-grid">
-    <div class="custom-swiper-grid__title">
-      {{ 'satisfaction-title' | global_editable: class: 'display-md-heading p-color-secondary d-flex flex-column row-gap-200' }}
-    </div>
-    <div class="swiper-wrapper custom-swiper-grid__slides">
+<div class="custom-swiper-grid">
+  <div class="custom-swiper-grid__title">
+    {{ 'satisfaction-title' | global_editable: class: 'display-md-heading p-color-secondary d-flex flex-column row-gap-200' }}
+  </div>
+
+  <div class="swiper customer-reviews-slider custom-swiper-grid__slides w-100">
+    <div class="swiper-wrapper">
       {% for testimonial in lists.testimonials.rows %}
-        <div class="swiper-slide">
+        <div class="swiper-slide w-fit-content">
           <article
-            class="testimonial-card d-flex flex-column row-gap-300 padding-300 padding-lg-400 bg-white h-100">
+            class="testimonial-card d-flex flex-column row-gap-300 padding-300 padding-lg-400 bg-white h-100 w-100">
             <div class="testimonial-card__stars d-flex align-items-center column-gap-25">
               {% for i in (1..testimonial.stars) %}
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
@@ -28,12 +29,34 @@
         </div>
       {% endfor %}
     </div>
-    <div
-      class="custom-swiper-grid__controls d-flex align-items-center column-gap-150 padding-top-400">
-      <div
-        class="swiper-button-prev swiper-button-prev--chev-icon radius-full bg-overlay-white-60"></div>
-      <div
-        class="swiper-button-next swiper-button-next--chev-icon radius-full bg-overlay-white-60"></div>
-    </div>
   </div>
-</swiper-slider>
+  <div
+    class="custom-swiper-grid__controls d-flex align-items-center column-gap-150 padding-top-400">
+    <div
+      class="customer-review-prev swiper-button-prev swiper-button-prev--chev-icon radius-full bg-overlay-white-60"></div>
+    <div
+      class="customer-review-next swiper-button-next swiper-button-next--chev-icon radius-full bg-overlay-white-60"></div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const reviewsSwiper = document.querySelector('.customer-reviews-slider');
+
+    if (reviewsSwiper) {
+      new Swiper(reviewsSwiper, {
+        slidesPerView: 1,
+        spaceBetween: 24,
+        navigation: {
+          nextEl: '.customer-review-next',
+          prevEl: '.customer-review-prev',
+        },
+        breakpoints: {
+          992: {
+            slidesPerView: 1.5,
+          }
+        }
+      });
+    }
+  });
+</script>

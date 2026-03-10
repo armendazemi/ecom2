@@ -1,33 +1,35 @@
-<section class="product-seo-section padding-bottom-600 padding-bottom-lg-1200">
-  <div class="container">
-    <div class="row row-gap-200 justify-content-center">
-      <div class="col-lg-8 text-center">
-        {% if admin %}
-          <p class="text-campaign">{{ "Titel och synlig text här" | t }}</p>
-        {% endif %}
-        {{ 'product-seo' | global_editable: class: 'display-lg-heading p-color-secondary d-flex flex-column row-gap-200' }}
-      </div>
+{% capture hasContent %}{{ 'product-seo' | has_global_editable }}{% endcapture %}
+{% if hasContent == 'true' %}
+  <section class="product-seo-section padding-bottom-600 padding-bottom-lg-1200">
+    <div class="container">
+      <div class="row row-gap-200 justify-content-center">
+        <div class="col-lg-8 text-center">
+          {% if admin %}
+            <p class="text-campaign">{{ "Titel och synlig text här" | t }}</p>
+          {% endif %}
+          {{ 'product-seo' | global_editable: class: 'display-lg-heading p-color-secondary d-flex flex-column row-gap-200' }}
+        </div>
 
-      <div class="col-lg-8 text-center product-seo-section__hidden-content {% if admin %} show {% endif %}"
-           inert
-           id="product-seo-extra">
-        {% if admin %}
-          <p class="text-campaign">{{ "Dold text" | t }}</p>
-        {% endif %}
+        <div class="col-lg-8 text-center product-seo-section__hidden-content {% if admin %} show {% endif %}"
+             id="product-seo-extra">
+          {% if admin %}
+            <p class="text-campaign">{{ "Dold text" | t }}</p>
+          {% endif %}
 
-        {{ 'product-seo-text' | global_editable: class: 'p-color-secondary' }}
-      </div>
+          {{ 'product-seo-text' | global_editable: class: 'p-color-secondary' }}
+        </div>
 
-      <div class="col-lg-8">
-        <div class="d-flex justify-content-center">
+        <div class="col-lg-8">
+          <div class="d-flex justify-content-center">
 
-          <button type="button" class="neutral-button-primary" aria-expanded="false"
-                  aria-controls="product-seo-extra">{{ "Visa mer" | t }}</button>
+            <button type="button" class="neutral-button-primary" aria-expanded="false"
+                    aria-controls="product-seo-extra">{{ "Visa mer" | t }}</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+{% endif %}
 
 
 <script>

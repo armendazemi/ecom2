@@ -27,7 +27,8 @@
                 </div>
                 {% for cat in site.article_categories.all %}
                   <div class="swiper-slide w-fit-content">
-                    <a href="{{ cat.url }}" class="category-button">
+                    <a href="{{ cat.url }}"
+                       class="category-button {% if cat.id == category.id %}active{% endif %}">
                       {{ cat.name }}
                     </a>
                   </div>
@@ -36,10 +37,9 @@
             </div>
           </swiper-slider>
         </div>
-        {{ articles }}
         <div class="col-12">
           <div class="row row-gap-lg-600 row-gap-400">
-            {% for article in articles.paginate[articlesToShow] %}
+            {% for article in category.articles[articlesToShow] %}
               <div class="col-lg-6 col-xl-4">
                 {% assign blogImage = article.preview %}
                 {% assign blogLink = article.url %}

@@ -75,7 +75,8 @@
       {% if lists.global-settings.rows[0].quantity_selector == "true" %}
         {% include 'quantity_selector' %}
       {% endif %}
-      <button type="submit" class="brand-button-primary w-100">{{ "Lägg till" | t }}</button>
+      <button type="submit" class="brand-button-primary w-100"
+              {% if product.variants.size >= 1 %}disabled{% endif %}>{{ "Lägg till" | t }}</button>
       {% include 'side_cart' %}
     </div>
 
@@ -110,6 +111,13 @@
           <div class="dropdown">
             <div class="dropdown__content">
               {{ product.short_description }}
+              {% if product.properties.size > 0 %}
+                <ul>
+                  {% for prop in product.properties %}
+                    <li class="text-secondary mb-0">{{ prop.presentation }}: {{ prop.value }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
             </div>
           </div>
         </accordion-component>

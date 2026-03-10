@@ -1,4 +1,10 @@
-<variant-quantity>
+<variant-quantity
+  {% if maxStock %}
+    max-stock="{{ maxStock }}"
+    variant_id="{{ variantId }}"
+    update-order
+  {% endif %}
+>
   <p id="quantity-label" class="visually-hidden">
     {{ "Välj antal" | t }}
   </p>
@@ -15,13 +21,9 @@
       </svg>
     </button>
 
-    <span class="variant-quantity__value"
-          role="spinbutton"
-          aria-valuemin="1"
-          aria-valuemax="10"
-          aria-valuenow="1"
-          aria-labelledby="quantity-label"
-    >1</span>
+    <span class="variant-quantity__value" aria-labelledby="quantity-label">
+      {% if item.quantity %}{{ item.quantity }}{% else %}1{% endif %}
+    </span>
 
     <button
       data-action="increment"
