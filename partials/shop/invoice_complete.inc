@@ -40,47 +40,49 @@
       </div>
 
       <div class="d-flex flex-column row-gap-50 padding-y-300 border-top-1--soft">
-        <div class="d-flex justify-content-between text-secondary">
-          <span>{{ "Delsumma" | t }}</span>
-          <span>{{ cart.item_total | currency: 0 }}</span>
-        </div>
-        {% if cart.discount_total > 0 %}
+        {% if customer.show_taxes %}
           <div class="d-flex justify-content-between text-secondary">
-            <span>{{ "Rabatt" | t }}</span>
-            <span class="text-campaign">-{{ cart.discount_total | currency: 0 }}</span>
+            <span>{{ "Delsumma" | t }}</span>
+            <span>{{ cart.item_total | currency: 0 }}</span>
+          </div>
+          {% if cart.discount_total > 0 %}
+            <div class="d-flex justify-content-between text-secondary">
+              <span>{{ "Rabatt" | t }}</span>
+              <span class="text-campaign">-{{ cart.discount_total | currency: 0 }}</span>
+            </div>
+          {% endif %}
+          <div class="d-flex justify-content-between text-secondary">
+            <span>{{ "Frakt" | t }}</span>
+            <span>{{ cart.shipment_total | currency: 0 }}</span>
+          </div>
+          <div class="d-flex justify-content-between fw-semi padding-top-200 border-top-1--soft">
+            <span>{{ "Totalt" | t }}</span>
+            <span>{{ cart.total | currency: 0 }}</span>
+          </div>
+          <div class="d-flex justify-content-between text-secondary">
+            <span>{{ "Varav moms" | t }}</span>
+            <span>{{ cart.included_tax_total | currency: 0 }}</span>
+          </div>
+        {% else %}
+          <div class="d-flex justify-content-between text-secondary">
+            <span>{{ "Delsumma exkl. moms" | t }}</span>
+            <span>{{ cart.pre_tax_item_total | currency: 0 }}</span>
+          </div>
+          {% if cart.discount_total > 0 %}
+            <div class="d-flex justify-content-between text-secondary">
+              <span>{{ "Rabatt" | t }}</span>
+              <span class="text-campaign">-{{ cart.discount_total | currency: 0 }}</span>
+            </div>
+          {% endif %}
+          <div class="d-flex justify-content-between text-secondary">
+            <span>{{ "Frakt" | t }}</span>
+            <span>{{ cart.shipment_total | currency: 0 }}</span>
+          </div>
+          <div class="d-flex justify-content-between fw-semi padding-top-200 border-top-1--soft">
+            <span>{{ "Totalt exkl. moms" | t }}</span>
+            <span>{{ cart.pre_tax_total | currency: 0 }}</span>
           </div>
         {% endif %}
-        <div class="d-flex justify-content-between text-secondary">
-          <span>{{ "Frakt" | t }}</span>
-          <span>{{ cart.shipment_total | currency: 0 }}</span>
-        </div>
-        <div class="d-flex justify-content-between fw-semi padding-top-200 border-top-1--soft">
-          <span>{{ "Totalt" | t }}</span>
-          <span>{{ cart.total | currency: 0 }}</span>
-        </div>
-        <div class="d-flex justify-content-between text-secondary">
-          <span>{{ "Varav moms" | t }}</span>
-          <span>{{ cart.included_tax_total | currency: 0 }}</span>
-        </div>
-      </div>
-
-      <div class="row padding-top-400">
-        <div class="col-12 col-sm-6">
-          <h3 class="fw-semi margin-bottom-100">{{ "Faktureringsadress" | t }}</h3>
-          <p class="text-secondary">
-            {{ cart.bill_address.first_name }} {{ cart.bill_address.last_name }}<br>
-            {{ cart.bill_address.address1 }}<br>
-            {{ cart.bill_address.zipcode }} {{ cart.bill_address.city }}
-          </p>
-        </div>
-        <div class="col-12 col-sm-6">
-          <h3 class="fw-semi margin-bottom-100">{{ "Leveransadress" | t }}</h3>
-          <p class="text-secondary">
-            {{ cart.ship_address.first_name }} {{ cart.ship_address.last_name }}<br>
-            {{ cart.ship_address.address1 }}<br>
-            {{ cart.ship_address.zipcode }} {{ cart.ship_address.city }}
-          </p>
-        </div>
       </div>
 
       <div class="padding-top-600">

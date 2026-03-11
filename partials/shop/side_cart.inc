@@ -37,7 +37,7 @@
   window.addEventListener('modalchange', (e) => {
     const target = e.detail.element;
     const action = e.detail.action;
-
+    console.log('event caught', e)
     if (target !== '#side-cart') {
       return;
     }
@@ -133,14 +133,13 @@
     title.textContent = orderItem.name;
 
     const price = toast.querySelector('.added-to-cart-toast__product-price');
-    console.log(orderItem.original_price, orderItem.price);
     if (Number(orderItem.original_price) > Number(orderItem.price)) {
       price.innerHTML = `
         <p class="text-secondary text-decoration-line-through">${window.ecomUtils.priceFormatter(window.showTaxes ? orderItem.original_amount : orderItem.original_amount_pre_tax)}</p>
-        <p class="fw-bold text-campaign">${window.ecomUtils.priceFormatter(window.showTaxes ? orderItem.amount : orderItem.amount_pre_tax)}</p>
+        <p class="fw-bold text-campaign">${window.ecomUtils.priceFormatter(window.showTaxes ? orderItem.amount : orderItem.pre_tax_amount)}</p>
         `;
     } else {
-      price.innerHTML = `<p class="text-secondary">${window.ecomUtils.priceFormatter(window.showTaxes ? orderItem.price : orderItem.price_pre_tax)}</p>`;
+      price.innerHTML = `<p class="text-secondary">${window.ecomUtils.priceFormatter(window.showTaxes ? orderItem.amount : orderItem.pre_tax_amount)}</p>`;
     }
 
     const options = orderItem.options;
