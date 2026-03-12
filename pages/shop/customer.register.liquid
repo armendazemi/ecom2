@@ -1,4 +1,8 @@
 {% include 'header' %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js"
+        integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y"
+        crossorigin="anonymous"></script>
+
 
 <section class="section-padding-large">
   <div class="container">
@@ -11,89 +15,203 @@
       </div>
 
       <div class="col-lg-5">
-        <form-component action="{{ customer.register_url }}" method="post" id="login-page-form"
-                        redirect="{{ customer.login_url }}" no-clear
-                        class="d-flex flex-column row-gap-400 needs-validation" novalidate>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="tab-button  active" id="private-tab" data-bs-toggle="tab" data-bs-target="#private-tab-pane"
+                    type="button" role="tab" aria-controls="private-tab-pane" aria-selected="true">
+              {{ "Privatperson" | t }}</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="tab-button " id="company-tab" data-bs-toggle="tab" data-bs-target="#company-tab-pane"
+                    type="button" role="tab" aria-controls="company-tab-pane" aria-selected="false">
+              {{ "Företag" | t }}</button>
+          </li>
+        </ul>
+      </div>
 
-          <div class="row">
-            <div class="col-lg input-group has-validation d-flex flex-column">
-              <label for="firstName">{{ "Förnamn" | t }}</label>
-              <input type="text" class="form-control input-default w-100" id="firstName" name="customer[first_name]"
-                     placeholder="{{ 'Förnamn' | t }}" aria-label="{{ 'Förnamn' | t }}" required>
+      <div class="tab-content col-lg-5" id="myTabContent">
+        <div class=" tab-pane fade show active" id="private-tab-pane" role="tabpanel"
+             aria-labelledby="private-tab" tabindex="0">
+          <form-component action="{{ customer.register_url }}" method="post" id="login-page-form"
+                          redirect="{{ customer.login_url }}" no-clear
+                          class="d-flex flex-column row-gap-400 needs-validation" novalidate>
+
+            <div class="row">
+              <div class="col-lg input-group has-validation d-flex flex-column">
+                <label for="firstName">{{ "Förnamn" | t }}</label>
+                <input type="text" class="form-control input-default w-100" id="firstName" name="customer[first_name]"
+                       placeholder="{{ 'Förnamn' | t }}" aria-label="{{ 'Förnamn' | t }}" required>
+                <div class="invalid-feedback">
+                  {{ "Ange ditt förnamn" | t }}
+                </div>
+              </div>
+              <div class="col-lg input-group has-validation d-flex flex-column">
+                <label for="lastName">{{ "Efternamn" | t }}</label>
+                <input type="text" class="form-control input-default w-100" id="lastName" name="customer[last_name]"
+                       placeholder="{{ 'Efternamn' | t }}" aria-label="{{ 'Efternamn' | t }}" required>
+                <div class="invalid-feedback">
+                  {{ "Ange ditt efternamn" | t }}
+                </div>
+              </div>
+            </div>
+
+            <div class="input-group has-validation d-flex flex-column">
+              <label for="email">{{ "Email" | t }}</label>
+              <input type="email" class="form-control w-100 input-default" id="email" name="customer[email]" required>
               <div class="invalid-feedback">
-                {{ "Ange ditt förnamn" | t }}
+                {{ "Ange en giltig e-postadress" | t }}
               </div>
             </div>
-            <div class="col-lg input-group has-validation d-flex flex-column">
-              <label for="lastName">{{ "Efternamn" | t }}</label>
-              <input type="text" class="form-control input-default w-100" id="lastName" name="customer[last_name]"
-                     placeholder="{{ 'Efternamn' | t }}" aria-label="{{ 'Efternamn' | t }}" required>
+
+            <div class="input-group has-validation d-flex flex-column">
+              <label for="password">{{ "Lösenord" | t }}</label>
+              <input type="password" class="form-control w-100 input-default" id="password" name="customer[password]"
+                     minlength="6"
+                     required>
+              <span class="text-tiny">{{ "Lösenordet måste vara minst 6 tecken" | t }}</span>
               <div class="invalid-feedback">
-                {{ "Ange ditt efternamn" | t }}
-              </div>
-            </div>
-          </div>
-
-          <div class="input-group has-validation d-flex flex-column">
-            <label for="email">{{ "Email" | t }}</label>
-            <input type="email" class="form-control w-100 input-default" id="email" name="customer[email]" required>
-            <div class="invalid-feedback">
-              {{ "Ange en giltig e-postadress" | t }}
-            </div>
-          </div>
-
-          <div class="input-group has-validation d-flex flex-column">
-            <label for="password">{{ "Lösenord" | t }}</label>
-            <input type="password" class="form-control w-100 input-default" id="password" name="customer[password]"
-                   minlength="6"
-                   required>
-            <span class="text-tiny">{{ "Lösenordet måste vara minst 6 tecken" | t }}</span>
-            <div class="invalid-feedback">
-              {{ "Ange ditt lösenord" | t }}
-            </div>
-          </div>
-
-
-          <div class="input-group has-validation d-flex flex-column">
-            <label for="passwordConfirm">{{ "Bekräfta ditt lösenord" | t }}</label>
-            <input type="password" class="form-control input-default w-100" id="passwordConfirm" minlength="6"
-                   name="customer[password_confirmation]" required>
-            <div class="invalid-feedback">
-              {{ "Bekräfta ditt lösenord" | t }}
-            </div>
-          </div>
-
-
-          <div class="d-flex flex-column row-gap-150">
-            <div class="form-check d-flex align-items-center column-gap-75 flex-wrap">
-              <input class="form-check-input" type="checkbox" name="policyAccept" id="policyAccept" required>
-              <label class="form-check-label mb-0 text-md fw-regular" for="policyAccept">
-                {{ "Jag godkänner" | t }} <a class="brand-link d-inline-flex" target="_blank"
-                                             href="{% if locale != "sv" %}/{{ locale }}{% endif %}/policy">{{ "villkoren" | t }}</a>
-              </label>
-              <div class="invalid-feedback w-100">
-                {{ "Du måste godkänna villkoren för att skapa ett konto" | t }}
+                {{ "Ange ditt lösenord" | t }}
               </div>
             </div>
 
-            <div class="form-check d-flex align-items-center column-gap-75 flex-wrap">
-              <input class="form-check-input" type="checkbox" name="customer[accept_newsletter]" id="newsletter">
-              <label class="form-check-label mb-0 text-md fw-regular" for="newsletter">
-                {{ "Ja, jag vill prenumerera på nyhetsbrevet" | t }}
-              </label>
+
+            <div class="input-group has-validation d-flex flex-column">
+              <label for="passwordConfirm">{{ "Bekräfta ditt lösenord" | t }}</label>
+              <input type="password" class="form-control input-default w-100" id="passwordConfirm" minlength="6"
+                     name="customer[password_confirmation]" required>
+              <div class="invalid-feedback">
+                {{ "Bekräfta ditt lösenord" | t }}
+              </div>
             </div>
 
 
-            <div class="d-flex align-items-center column-gap-75">
-              <input type="checkbox" name="show_password" id="show_password">
-              <label class="mb-0 text-md fw-regular" for="show_password">
-                {{ "Visa lösenord" | t }}
-              </label>
-            </div>
-          </div>
+            <div class="d-flex flex-column row-gap-150">
+              <div class="form-check d-flex align-items-center column-gap-75 flex-wrap">
+                <input class="form-check-input" type="checkbox" name="policyAccept" id="policyAccept" required>
+                <label class="form-check-label mb-0 text-md fw-regular" for="policyAccept">
+                  {{ "Jag godkänner" | t }} <a class="brand-link d-inline-flex" target="_blank"
+                                               href="{% if locale != "sv" %}/{{ locale }}{% endif %}/policy">{{ "villkoren" | t }}</a>
+                </label>
+                <div class="invalid-feedback w-100">
+                  {{ "Du måste godkänna villkoren för att skapa ett konto" | t }}
+                </div>
+              </div>
 
-          <button type="submit" class="brand-button-primary">{{ "Skapa konto" | t }}</button>
-        </form-component>
+              <div class="form-check d-flex align-items-center column-gap-75 flex-wrap">
+                <input class="form-check-input" type="checkbox" name="customer[accept_newsletter]" id="newsletter">
+                <label class="form-check-label mb-0 text-md fw-regular" for="newsletter">
+                  {{ "Ja, jag vill prenumerera på nyhetsbrevet" | t }}
+                </label>
+              </div>
+
+
+              <div class="d-flex align-items-center column-gap-75">
+                <input type="checkbox" name="show_password" id="show_password">
+                <label class="mb-0 text-md fw-regular" for="show_password">
+                  {{ "Visa lösenord" | t }}
+                </label>
+              </div>
+            </div>
+
+            <button type="submit" class="brand-button-primary">{{ "Skapa konto" | t }}</button>
+          </form-component>
+        </div>
+        <div class=" tab-pane fade" id="company-tab-pane" role="tabpanel" aria-labelledby="company-tab"
+             tabindex="0">
+          <form-component action="{{ customer.register_url }}" method="post" id="login-page-form"
+                          redirect="{{ customer.login_url }}" no-clear
+                          class="d-flex flex-column row-gap-400 needs-validation" novalidate>
+
+            <div class="row">
+              <div class="col-lg input-group has-validation d-flex flex-column">
+                <label for="firstName">{{ "Förnamn" | t }}</label>
+                <input type="text" class="form-control input-default w-100" id="firstName" name="customer[first_name]"
+                       placeholder="{{ 'Förnamn' | t }}" aria-label="{{ 'Förnamn' | t }}" required>
+                <div class="invalid-feedback">
+                  {{ "Ange ditt förnamn" | t }}
+                </div>
+              </div>
+              <div class="col-lg input-group has-validation d-flex flex-column">
+                <label for="lastName">{{ "Efternamn" | t }}</label>
+                <input type="text" class="form-control input-default w-100" id="lastName" name="customer[last_name]"
+                       placeholder="{{ 'Efternamn' | t }}" aria-label="{{ 'Efternamn' | t }}" required>
+                <div class="invalid-feedback">
+                  {{ "Ange ditt efternamn" | t }}
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg input-group has-validation d-flex flex-column">
+              <label for="company">{{ "Företag" | t }}</label>
+              <input type="text" class="form-control input-default w-100" id="company" name="customer[last_name]"
+                     placeholder="{{ 'Företag' | t }}" aria-label="{{ 'Företag' | t }}" required>
+              <div class="invalid-feedback">
+                {{ "Ange ditt företagsnamn" | t }}
+              </div>
+            </div>
+
+            <div class="input-group has-validation d-flex flex-column">
+              <label for="email">{{ "Email" | t }}</label>
+              <input type="email" class="form-control w-100 input-default" id="email" name="customer[email]" required>
+              <div class="invalid-feedback">
+                {{ "Ange en giltig e-postadress" | t }}
+              </div>
+            </div>
+
+            <div class="input-group has-validation d-flex flex-column">
+              <label for="password">{{ "Lösenord" | t }}</label>
+              <input type="password" class="form-control w-100 input-default" id="password" name="customer[password]"
+                     minlength="6"
+                     required>
+              <span class="text-tiny">{{ "Lösenordet måste vara minst 6 tecken" | t }}</span>
+              <div class="invalid-feedback">
+                {{ "Ange ditt lösenord" | t }}
+              </div>
+            </div>
+
+
+            <div class="input-group has-validation d-flex flex-column">
+              <label for="passwordConfirm">{{ "Bekräfta ditt lösenord" | t }}</label>
+              <input type="password" class="form-control input-default w-100" id="passwordConfirm" minlength="6"
+                     name="customer[password_confirmation]" required>
+              <div class="invalid-feedback">
+                {{ "Bekräfta ditt lösenord" | t }}
+              </div>
+            </div>
+
+
+            <div class="d-flex flex-column row-gap-150">
+              <div class="form-check d-flex align-items-center column-gap-75 flex-wrap">
+                <input class="form-check-input" type="checkbox" name="policyAccept" id="policyAccept" required>
+                <label class="form-check-label mb-0 text-md fw-regular" for="policyAccept">
+                  {{ "Jag godkänner" | t }} <a class="brand-link d-inline-flex" target="_blank"
+                                               href="{% if locale != "sv" %}/{{ locale }}{% endif %}/policy">{{ "villkoren" | t }}</a>
+                </label>
+                <div class="invalid-feedback w-100">
+                  {{ "Du måste godkänna villkoren för att skapa ett konto" | t }}
+                </div>
+              </div>
+
+              <div class="form-check d-flex align-items-center column-gap-75 flex-wrap">
+                <input class="form-check-input" type="checkbox" name="customer[accept_newsletter]" id="newsletter">
+                <label class="form-check-label mb-0 text-md fw-regular" for="newsletter">
+                  {{ "Ja, jag vill prenumerera på nyhetsbrevet" | t }}
+                </label>
+              </div>
+
+
+              <div class="d-flex align-items-center column-gap-75">
+                <input type="checkbox" name="show_password" id="show_password">
+                <label class="mb-0 text-md fw-regular" for="show_password">
+                  {{ "Visa lösenord" | t }}
+                </label>
+              </div>
+            </div>
+
+            <input type="hidden" name="customer[customer_type]" value="company">
+            <button type="submit" class="brand-button-primary">{{ "Skapa konto" | t }}</button>
+          </form-component>
+        </div>
       </div>
 
       <div class="col-lg-5">

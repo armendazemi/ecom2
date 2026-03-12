@@ -28,8 +28,8 @@ $alpha-neutral-400A: rgba(3, 7, 18, 0.4)
 $alpha-neutral-500A: rgba(3, 7, 18, 0.50)
 
 // Primary Colors
-$primary-1000: #141A36
-$primary-800: #1C254D
+$primary-1000: #0fa4e5
+$primary-800: #afe612
 $primary-400: #FAFAFA
 $primary-300: #EFEFEF
 $primary-200: #FAFAFA
@@ -294,7 +294,7 @@ $breakpoints: (sm: 568px, md: 768px, lg: 992px, xl: 1200px)
 //--------------------------
 // TYPOGRAPHY
 // --------------------------
-$font-heading: "Instrument Sans", sans-serif
+$font-heading: "Grandstander", cursive
 $font-body: "Barlow", sans-serif
 
 // Mixins
@@ -437,6 +437,7 @@ button
   height: 44px
   padding: 0 $space-300
   @include fontSizePxToRem(16)
+  border-radius: 30px
 
 .brand-button-primary
   @extend %button-base
@@ -634,6 +635,33 @@ button
   align-items: center
   justify-content: center
   column-gap: $space-075
+
+.tab-button
+  @extend %button-base
+  height: auto
+  flex-direction: column
+  overflow: hidden
+  background: transparent
+  border-radius: $radius-full
+  transition: all 300ms ease-in-out
+
+  &::after
+    content: ""
+    width: 100%
+    height: 2px
+    opacity: 0
+    background: transparent
+    transform: translateX(-100%)
+    transition: all 300ms ease-in-out
+
+
+  &.active
+    font-weight: 600
+
+    &::after
+      transform: translateX(0)
+      background: $border-bold
+      opacity: 1
 
 // --------------------------
 // HELPERS
@@ -1018,6 +1046,11 @@ h1, h2, h3, h4, h5, h6, p
     object-fit: cover
     width: 100%
 
+.aspect-4-5--editable
+  img
+    aspect-ratio: 4 / 5
+    object-fit: cover
+    width: 100%
 a
   color: unset
 
@@ -1300,6 +1333,7 @@ variant-quantity
   display: flex
   align-items: center
   border: 1px solid $border-bold
+  border-radius: 30px
 
   button, span
     display: flex
@@ -1438,12 +1472,13 @@ variant-quantity[disabled]
   justify-content: center
   border-radius: 0
   padding: 0 $space-100
-  @include fontSizePxToRem(12)
+  @include fontSizePxToRem(16)
   color: $neutral-0
   font-weight: 500
   letter-spacing: 0.48px
   text-transform: uppercase
   line-height: 150%
+  border-radius: 10px
 
 
 // --------------------------
@@ -1472,6 +1507,7 @@ variant-quantity[disabled]
   border: 1px solid $border-bold !important
   color: $text-primary
   outline: none !important
+  border-radius: 30px !important
 
   &:hover
     background-color: $background-subtle-hover
@@ -1514,6 +1550,7 @@ variant-quantity[disabled]
   background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9.51759 15.6153C7.80993 15.6153 6.36376 15.023 5.17909 13.8385C3.99459 12.6538 3.40234 11.2077 3.40234 9.50002C3.40234 7.79235 3.99459 6.34618 5.17909 5.16152C6.36376 3.97702 7.80993 3.38477 9.51759 3.38477C11.2253 3.38477 12.6714 3.97702 13.8561 5.16152C15.0406 6.34618 15.6328 7.79235 15.6328 9.50002C15.6328 10.2142 15.513 10.8963 15.2733 11.5463C15.0335 12.1963 14.7136 12.7616 14.3136 13.2423L20.0676 18.9963C20.2061 19.1346 20.2769 19.3086 20.2801 19.5183C20.2833 19.7279 20.2124 19.9052 20.0676 20.05C19.9228 20.1948 19.7471 20.2673 19.5406 20.2673C19.3343 20.2673 19.1587 20.1948 19.0138 20.05L13.2598 14.296C12.7598 14.7088 12.1848 15.0319 11.5348 15.2653C10.8848 15.4986 10.2124 15.6153 9.51759 15.6153ZM9.51759 14.1155C10.8061 14.1155 11.8974 13.6683 12.7916 12.774C13.6859 11.8798 14.1331 10.7885 14.1331 9.50002C14.1331 8.21152 13.6859 7.12018 12.7916 6.22601C11.8974 5.33168 10.8061 4.88452 9.51759 4.88452C8.22909 4.88452 7.13776 5.33168 6.24359 6.22601C5.34926 7.12018 4.90209 8.21152 4.90209 9.50002C4.90209 10.7885 5.34926 11.8798 6.24359 12.774C7.13776 13.6683 8.22909 14.1155 9.51759 14.1155Z" fill="%23030712"/></svg>')
   background-repeat: no-repeat
   background-position: $space-150 center
+  border-radius: 30px
 
 
 .search-input-clear
@@ -1580,7 +1617,7 @@ input[type=radio]
 select
   padding: $space-125 $space-600 $space-125 $space-300
   border-radius: 0
-  border: 1px solid $border-soft
+  border: 1px solid $border-bold !important
   appearance: none
   background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="21" height="20" viewBox="0 0 21 20" fill="none"><path d="M10.3345 12.7735L5.62305 8.06204L6.39701 7.28809L10.3345 11.2256L14.272 7.28809L15.046 8.06204L10.3345 12.7735Z" fill="%23030712"/></svg>')
   background-repeat: no-repeat
@@ -1592,8 +1629,32 @@ select
 // ----
 // HEADER
 // ----
+
+.customer-type
+  button
+    @extend .clear-button
+    padding-left: 0
+    padding-right: 0
+
+  &.active
+    button
+      text-decoration: 2px solid underline black
+
+  &:first-of-type
+    button
+      gap: 0 !important
+
+    button::after
+      content: ""
+      display: inline-block
+      background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="1" height="25" viewBox="0 0 1 25" fill="none"><path d="M0.5 0.5V24.5" stroke="%23030712" stroke-opacity="0.14" stroke-linecap="round"/></svg>')
+      background-repeat: no-repeat
+      width: 2px
+      height: 24px
+      margin: 0 $space-150
+
 .nav-logo
-  width: 128px
+  width: 200px
 
   img
     object-fit: contain
@@ -1746,6 +1807,8 @@ select
 // --------------------------
 .collection-card
   aspect-ratio: 3 / 4
+  border-radius: 30px
+  overflow: hidden
 
 .collection-card__image-wrapper
   background-color: rgb(3, 7, 18)

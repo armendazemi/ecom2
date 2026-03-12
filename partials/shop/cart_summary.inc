@@ -52,7 +52,7 @@
       </div>
 
       <div class="text-secondary d-flex justify-content-between text-secondary">
-        <span class="">{{ "Varav moms" | t }}</span>
+        <span class="">{% if showTaxes %}{{ "Varav moms" | t }}{% else %}{{ "Moms tillkommer" | t  }}{% endif %}</span>
         <span class="text-right" id="tax-price">{{ cart.included_tax_total | currency: 0 }}</span>
       </div>
     </div>

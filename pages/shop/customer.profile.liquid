@@ -12,7 +12,7 @@
   <div class="container">
     <div class="row justify-content-between align-items-end row-gap-200">
       <div class="col-lg-auto">
-        <h1 class="display-md">{{ "Välkommen" }}</h1>
+        <h1 class="display-3 margin-bottom-150">{{ "Välkommen" }}</h1>
         <p
           class="text-secondary">{{ "Här är ditt konto. Härifrån kan du se din orderhistorik och uppdatera dinauppgifter." }}</p>
       </div>
@@ -34,11 +34,11 @@
       <div class="col-lg-4 padding-right-lg-600  padding-top-400 padding-top-lg-600 border-top-1-lg--soft">
         <ul class="profile-navigation list-unstyled d-flex flex-lg-column gap-100">
           <li role="presentation">
-            <button type="button" class="category-button active"
+            <button type="button" class="tab-button active"
                     data-pane-target="order-history">{{ "Orderhistorik" | t }}</button>
           </li>
           <li role="presentation">
-            <button type="button" class="category-button"
+            <button type="button" class="tab-button"
                     data-pane-target="customer-details">{{ "Mina uppgifter" | t }}</button>
           </li>
         </ul>
@@ -47,25 +47,26 @@
       <div
         class="col-lg-8 padding-left-lg-600 padding-top-400 padding-top-lg-600 border-top-1-lg--soft border-left-1-lg--soft">
         <div class="customer-profile-panes">
+
           <div class="profile-content__order-history customer-profile-pane open" data-pane="order-history">
             <div class="d-flex flex-column row-gap-100">
-
-              <h2 class="display-xs">{{ "Orderhistorik" | t }}</h2>
-              <accordion-group class="d-flex flex-column row-gap-300">
-                {% if customer.orders.size > 0 %}
-                {% for order in customer.orders %}
-                  {% include 'order_accordion' %}
-                {% endfor %}
-              </accordion-group>
+              <h2 class="display-6">{{ "Orderhistorik" | t }}</h2>
+              {% if customer.orders.size > 0 %}
+                <accordion-group class="d-flex flex-column row-gap-300">
+                  {% for order in customer.orders %}
+                    {% include 'order_accordion' %}
+                  {% endfor %}
+                </accordion-group>
               {% else %}
-              <p class="text-secondary">{{ "Du har inga ordrar ännu." | t }}</p>
+                <p class="text-secondary">{{ "Du har inga ordrar ännu." | t }}</p>
+              {% endif %}
             </div>
-            {% endif %}
           </div>
+
           <div class="profile-content__user-details customer-profile-pane" data-pane="customer-details">
             <div class="d-flex flex-column row-gap-300">
               <div class="d-flex flex-column row-gap-100">
-                <h2 class="display-xs">{{ "Mina uppgifter" | t }}</h2>
+                <h2 class="display-6">{{ "Mina uppgifter" | t }}</h2>
                 <p class="text-secondary">{{ "Uppdatera dina kontouppgifter här." | t }}</p>
               </div>
               {% include 'user_form' %}
@@ -81,24 +82,42 @@
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const panesButtons = document.querySelectorAll('button[data-pane-target]');
-    panesButtons.forEach(button => button.addEventListener('click', handlePaneDisplay));
+    const urlParams = new URLSearchParams(window.location.search);
+    const initialPane = urlParams.get('pane');
+
+    if (initialPane) {
+      const targetButton = document.querySelector(`button[data-pane-target="${initialPane}"]`);
+      if (targetButton) {
+        // Simulate a click or call the handler to open the correct pane
+        activatePane(initialPane, targetButton);
+      }
+    }
+
+    panesButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        const paneSelector = e.currentTarget.getAttribute('data-pane-target');
+        activatePane(paneSelector, e.currentTarget);
+      });
+    });
   });
 
-  function handlePaneDisplay (e) {
-    const paneSelector = e.target.getAttribute('data-pane-target');
+  function activatePane (paneSelector, buttonElement) {
     const paneElement = document.querySelector(`.customer-profile-pane[data-pane="${paneSelector}"]`);
     const currentActivePaneElement = document.querySelector('.customer-profile-pane.open');
 
-    if (paneElement === currentActivePaneElement) {
-      return;
+    if (paneElement === currentActivePaneElement) return;
+    if (currentActivePaneElement) {
+      window.ecomUtils.toggleVisibility(currentActivePaneElement, 'close');
     }
-    window.ecomUtils.toggleVisibility(currentActivePaneElement, 'close');
     window.ecomUtils.toggleVisibility(paneElement, 'open');
 
     const buttons = document.querySelectorAll('button[data-pane-target]');
-    buttons.forEach(button => button.classList.remove('active'));
-    e.target.classList.add('active');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    buttonElement.classList.add('active');
 
+    const newUrl = new URL(window.location);
+    newUrl.searchParams.set('pane', paneSelector);
+    window.history.pushState({}, '', newUrl);
   }
 </script>
 
