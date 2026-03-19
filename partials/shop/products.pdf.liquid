@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 12px;
+      color: #1a1a1a;
+      background: #fff;
+    }
+
+    /* ── Header ── */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 32px 20px;
+      border-bottom: 4px solid #afe612;
+    }
+
+    .page-header img {
+      height: 52px;
+      width: auto;
+    }
+
+    .page-header-title {
+      text-align: right;
+    }
+
+    .page-header-title h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1a1a1a;
+      letter-spacing: 0.5px;
+    }
+
+    .page-header-title p {
+      font-size: 11px;
+      color: #666;
+      margin-top: 3px;
+    }
+
+    /* ── Instructions ── */
+    .instructions {
+      margin: 16px 32px;
+      padding: 10px 14px;
+      background: #f7fde8;
+      border-left: 4px solid #afe612;
+      font-size: 11px;
+      color: #444;
+      border-radius: 0 4px 4px 0;
+    }
+
+    /* ── Table ── */
+    .product-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0 0 32px;
+    }
+
+    .product-table thead tr {
+      background: #afe612;
+      color: #1a1a1a;
+    }
+
+    .product-table thead th {
+      padding: 9px 12px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      border: none;
+    }
+
+    .product-table thead th.col-nr    { width: 36px;  text-align: center; }
+    .product-table thead th.col-img   { width: 64px;  text-align: center; }
+    .product-table thead th.col-name  { text-align: left; }
+    .product-table thead th.col-antal { width: 80px;  text-align: center; }
+
+    .product-table tbody tr {
+      border-bottom: 1px solid #e8e8e8;
+    }
+
+    .product-table tbody tr:nth-child(even) {
+      background: #f9f9f9;
+    }
+
+    .product-table tbody tr:nth-child(odd) {
+      background: #ffffff;
+    }
+
+    .product-table tbody td {
+      padding: 8px 12px;
+      vertical-align: middle;
+    }
+
+    .col-nr {
+      text-align: center;
+      color: #999;
+      font-size: 10px;
+    }
+
+    .col-img {
+      text-align: center;
+      padding: 6px 8px !important;
+    }
+
+    .col-img img {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      border-radius: 3px;
+      background: #fff;
+    }
+
+    .col-img .no-image {
+      width: 48px;
+      height: 48px;
+      background: #eeeeee;
+      border-radius: 3px;
+      display: inline-block;
+    }
+
+    .product-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .product-sku {
+      font-size: 10px;
+      color: #999;
+      margin-top: 2px;
+    }
+
+    .col-antal {
+      text-align: center;
+    }
+
+    .antal-box {
+      display: inline-block;
+      width: 52px;
+      height: 28px;
+      border: 1.5px solid #bbb;
+      border-radius: 4px;
+      background: #fff;
+    }
+
+    /* ── Footer ── */
+    .page-footer {
+      margin: 0 32px;
+      padding-top: 14px;
+      border-top: 2px solid #afe612;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 10px;
+      color: #999;
+    }
+
+    /* ── Print ── */
+    @media print {
+      body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+      .product-table thead tr { background: #afe612 !important; }
+      .product-table tbody tr:nth-child(even) { background: #f9f9f9 !important; }
+
+      tr { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-header">
+    <img src="https://s3-eu-west-1.amazonaws.com/static.wm3.se/sites/1525/template_assets/logo.png" alt="Logotyp">
+    <div class="page-header-title">
+      <h1>{{ "Beställningsformulär" | t }}</h1>
+      <p>{{ "Fyll i önskat antal och skicka in din beställning" | t }}</p>
+    </div>
+  </div>
+
+  <div class="instructions">
+    {{ "Ange önskat antal i kolumnen Antal. Skicka sedan in formuläret till oss." | t }}
+  </div>
+
+  <table class="product-table">
+    <thead>
+      <tr>
+        <th class="col-nr">#</th>
+        <th class="col-img">{{ "Bild" | t }}</th>
+        <th class="col-name">{{ "Produkt" | t }}</th>
+        <th class="col-antal">{{ "Antal" | t }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in products.all %}
+      <tr>
+        <td class="col-nr">{{ forloop.index }}</td>
+        <td class="col-img">
+            <img src="{{ p.first_image.original }}" alt="{{ p.name }}">
+        </td>
+        <td>
+          <div class="product-name">{{ p.name }}</div>
+          {% if p.master.sku %}
+            <div class="product-sku">{{ p.master.sku }}</div>
+          {% endif %}
+        </td>
+        <td class="col-antal">
+          <span class="antal-box"></span>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <span>{{ "Utskrivet" | t }} {{ "today" | date: "%Y-%m-%d" }}</span>
+    <span>{{ products.all | size }} {{ "produkter" | t }}</span>
+  </div>
+
+</body>
+</html>

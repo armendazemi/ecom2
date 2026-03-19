@@ -213,31 +213,5 @@
     </div>
   </form-component>
 
-  <script>
-    function initShipAddressToggle () {
-      const checkbox = document.getElementById('use_bill_address');
-      const shipFields = document.getElementById('ship-address-fields');
-      if (!checkbox || !shipFields) return;
-
-      const requiredInputs = shipFields.querySelectorAll('input');
-
-      function toggle () {
-        const hide = checkbox.checked;
-        shipFields.style.display = hide ? 'none' : '';
-        requiredInputs.forEach(function (input) {
-          input.required = !hide;
-        });
-      }
-
-      checkbox.addEventListener('change', toggle);
-      toggle();
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', initShipAddressToggle);
-    } else {
-      initShipAddressToggle();
-    }
-  </script>
 
 {% endif %}
